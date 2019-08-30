@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 	bool rtclient_init();
+	void rtclient_login(const char *name, const char *password);
 	void rtclient_cleanup();
 
 #ifdef __cplusplus
