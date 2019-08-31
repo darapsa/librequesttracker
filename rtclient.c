@@ -6,12 +6,15 @@
 #endif // ANDROID
 #endif // DEBUG
 #include <stdbool.h>
+#include <string.h>
+#include <stdlib.h>
 #include <curl/curl.h>
 #include "rtclient.h"
 
 static CURL *handle = NULL;
+static char *server_url = NULL;
 
-bool rtclient_init()
+bool rtclient_init(const char *url)
 {
 	curl_global_init(CURL_GLOBAL_SSL);
 	handle = curl_easy_init();
@@ -19,7 +22,9 @@ bool rtclient_init()
 		curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
 #ifdef DEBUG
 		curl_easy_setopt(handle, CURLOPT_VERBOSE, 1L);
-#endif
+#endif // DEBUG
+		server_url = malloc(strlen(url) + 1);
+		strcpy(server_url, url);
 	}
 
 	return (bool)handle;
@@ -50,7 +55,7 @@ void rtclient_login(const char *name, const char *password)
 			CURLFORM_END);
 	last = NULL;
 
-	curl_easy_setopt(handle, CURLOPT_URL, "https://darapsa.co.id/rt");
+	curl_easy_setopt(handle, CURLOPT_URL, server_url);
 	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, handle_login);
 	curl_easy_setopt(handle, CURLOPT_HTTPPOST, post);
 #ifdef DEBUG
@@ -71,7 +76,9 @@ void rtclient_login(const char *name, const char *password)
 
 void rtclient_cleanup()
 {
-	if (handle)
+	if (handle) {
+		free(server_url);
 		curl_easy_cleanup(handle);
+	}
 	curl_global_cleanup();
 }
