@@ -29,7 +29,7 @@ static size_t handle_login(const char *response, size_t size, size_t nmemb, void
 {
 #ifdef DEBUG
 #ifdef ANDROID
-	__android_log_print(ANDROID_LOG_DEBUG, "libkelakon.so", "Login response:\n%s", response);
+	__android_log_print(ANDROID_LOG_DEBUG, "librtclient.so", "Login response:\n%s", response);
 #else
 	fprintf(stderr, "Login response:\n%s\n", response);
 #endif // ANDROID
@@ -61,7 +61,7 @@ void rtclient_login(const char *name, const char *password)
 	if (res != CURLE_OK) {
 		const char *error = curl_easy_strerror(res);
 #ifdef ANDROID
-		__android_log_print(ANDROID_LOG_ERROR, "libkelakon.so", "cURL perform error: %s", error);
+		__android_log_print(ANDROID_LOG_ERROR, "librtclient.so", "cURL perform error: %s", error);
 #else
 		fprintf(stderr, "cURL perform error: %s\n", error);
 #endif // ANDROID
