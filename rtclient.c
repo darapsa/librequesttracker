@@ -73,6 +73,12 @@ void rtclient_login(const char *name, const char *password)
 #endif // ANDROID
 	}
 #endif // DEBUG
+	static const char *user_path = "/REST/1.0/user/";
+	char user_url[strlen(server_url) + strlen(user_path) + strlen(name) + 1];
+	sprintf(user_url, "%s%s%s", server_url, user_path, name);
+	curl_easy_setopt(handle, CURLOPT_URL, user_url);
+	curl_easy_setopt(handle, CURLOPT_HTTPGET, 1L);
+	curl_easy_perform(handle);
 }
 
 void rtclient_cleanup()
