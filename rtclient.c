@@ -20,6 +20,7 @@ bool rtclient_init(const char *url)
 	handle = curl_easy_init();
 	if (handle) {
 		curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
+		curl_easy_setopt(handle, CURLOPT_COOKIEFILE, "");
 #ifdef DEBUG
 		curl_easy_setopt(handle, CURLOPT_VERBOSE, 1L);
 #endif // DEBUG
