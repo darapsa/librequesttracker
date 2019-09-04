@@ -8,6 +8,7 @@ extern "C" {
 	bool rtclient_init(const char *server_url);
 	void rtclient_login(const char *name, const char *password);
 	void rtclient_user(const char *name);
+	void rtclient_search(const char *query);
 	void rtclient_cleanup();
 
 #ifdef __cplusplus

@@ -21,6 +21,7 @@ bool rtclient_init(const char *url)
 	if (curl) {
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
+		curl_easy_setopt(curl, CURLOPT_REFERER, url);
 #ifdef DEBUG
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 #endif // DEBUG
@@ -62,14 +63,27 @@ void rtclient_login(const char *name, const char *password)
 #endif // DEBUG
 }
 
-void rtclient_user(const char *name)
+static inline void request(const char *url)
 {
-	static const char *user_path = "/REST/1.0/user/";
-	char user_url[strlen(server_url) + strlen(user_path) + strlen(name) + 1];
-	sprintf(user_url, "%s%s%s", server_url, user_path, name);
-	curl_easy_setopt(curl, CURLOPT_URL, user_url);
+	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
 	curl_easy_perform(curl);
+}
+
+void rtclient_user(const char *name)
+{
+	static const char *path = "/REST/1.0/user/";
+	char url[strlen(server_url) + strlen(path) + strlen(name) + 1];
+	sprintf(url, "%s%s%s", server_url, path, name);
+	request(url);
+}
+
+void rtclient_search(const char *query)
+{
+	static const char *path = "/REST/1.0/search/ticket?query=";
+	char url[strlen(server_url) + strlen(path) + strlen(query) + 1];
+	sprintf(url, "%s%s%s", server_url, path, query);
+	request(url);
 }
 
 void rtclient_cleanup()
