@@ -11,24 +11,24 @@
 #include <curl/curl.h>
 #include "rtclient.h"
 
-static CURL *handle = NULL;
+static CURL *curl = NULL;
 static char *server_url = NULL;
 
 bool rtclient_init(const char *url)
 {
 	curl_global_init(CURL_GLOBAL_SSL);
-	handle = curl_easy_init();
-	if (handle) {
-		curl_easy_setopt(handle, CURLOPT_FOLLOWLOCATION, 1L);
-		curl_easy_setopt(handle, CURLOPT_COOKIEFILE, "");
+	curl = curl_easy_init();
+	if (curl) {
+		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+		curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
 #ifdef DEBUG
-		curl_easy_setopt(handle, CURLOPT_VERBOSE, 1L);
+		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 #endif // DEBUG
 		server_url = malloc(strlen(url) + 1);
 		strcpy(server_url, url);
 	}
 
-	return (bool)handle;
+	return (bool)curl;
 }
 
 void rtclient_login(const char *name, const char *password)
@@ -44,12 +44,12 @@ void rtclient_login(const char *name, const char *password)
 			CURLFORM_END);
 	last = NULL;
 
-	curl_easy_setopt(handle, CURLOPT_URL, server_url);
-	curl_easy_setopt(handle, CURLOPT_HTTPPOST, post);
+	curl_easy_setopt(curl, CURLOPT_URL, server_url);
+	curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
 #ifdef DEBUG
 	CURLcode res =
 #endif // DEBUG
-		curl_easy_perform(handle);
+		curl_easy_perform(curl);
 #ifdef DEBUG
 	if (res != CURLE_OK) {
 		const char *error = curl_easy_strerror(res);
@@ -67,16 +67,16 @@ void rtclient_user(const char *name)
 	static const char *user_path = "/REST/1.0/user/";
 	char user_url[strlen(server_url) + strlen(user_path) + strlen(name) + 1];
 	sprintf(user_url, "%s%s%s", server_url, user_path, name);
-	curl_easy_setopt(handle, CURLOPT_URL, user_url);
-	curl_easy_setopt(handle, CURLOPT_HTTPGET, 1L);
-	curl_easy_perform(handle);
+	curl_easy_setopt(curl, CURLOPT_URL, user_url);
+	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+	curl_easy_perform(curl);
 }
 
 void rtclient_cleanup()
 {
-	if (handle) {
+	if (curl) {
 		free(server_url);
-		curl_easy_cleanup(handle);
+		curl_easy_cleanup(curl);
 	}
 	curl_global_cleanup();
 }
