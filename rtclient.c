@@ -60,6 +60,13 @@ void rtclient_login(const char *name, const char *password)
 #endif // ANDROID
 	}
 #endif // DEBUG
+}
+
+void rtclient_user(const char *name)
+{
+#ifdef DEBUG
+	fprintf(stderr, "NAME:\n%s\n", name);
+#endif
 	static const char *user_path = "/REST/1.0/user/";
 	char user_url[strlen(server_url) + strlen(user_path) + strlen(name) + 1];
 	sprintf(user_url, "%s%s%s", server_url, user_path, name);
