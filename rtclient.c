@@ -31,18 +31,6 @@ bool rtclient_init(const char *url)
 	return (bool)handle;
 }
 
-static size_t handle_login(const char *response, size_t size, size_t nmemb, void *writedata)
-{
-#ifdef DEBUG
-#ifdef ANDROID
-	__android_log_print(ANDROID_LOG_DEBUG, "librtclient.so", "Login response:\n%s", response);
-#else
-	fprintf(stderr, "Login response:\n%s\n", response);
-#endif // ANDROID
-#endif // DEBUG
-	return size * nmemb;
-}
-
 void rtclient_login(const char *name, const char *password)
 {
 	struct curl_httppost *post, *last = NULL;
@@ -57,7 +45,6 @@ void rtclient_login(const char *name, const char *password)
 	last = NULL;
 
 	curl_easy_setopt(handle, CURLOPT_URL, server_url);
-	curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, handle_login);
 	curl_easy_setopt(handle, CURLOPT_HTTPPOST, post);
 #ifdef DEBUG
 	CURLcode res =
