@@ -47,6 +47,7 @@ void rtclient_login(const char *name, const char *password)
 
 	curl_easy_setopt(curl, CURLOPT_URL, server_url);
 	curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
 #ifdef DEBUG
 	CURLcode res =
 #endif // DEBUG
@@ -63,6 +64,27 @@ void rtclient_login(const char *name, const char *password)
 #endif // DEBUG
 }
 
+static size_t
+user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
+{
+	size_t realsize = size * nmemb;
+	char response[realsize + 1];
+	memcpy(&response[0], contents, realsize);
+	response[realsize] = '\0';
+	char *token = strtok(response, "\n");
+	while (token) {
+#ifdef DEBUG
+#ifdef ANDROID
+		__android_log_print(ANDROID_LOG_ERROR, "librtclient.so", "Token:\n %s", token);
+#else
+		fprintf(stderr, "Token:\n%s\n", token);
+#endif // ANDROID
+#endif // DEBUG
+		token = strtok(NULL, "\n");
+	}
+	return realsize;
+}
+
 static inline void request(const char *path, const char *suffix)
 {
 	char url[strlen(server_url) + strlen(path) + strlen(suffix) + 1];
@@ -74,6 +96,7 @@ static inline void request(const char *path, const char *suffix)
 
 void rtclient_user(const char *name)
 {
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, user_callback);
 	request("/REST/1.0/user/", name);
 }
 
