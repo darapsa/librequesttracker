@@ -63,8 +63,10 @@ void rtclient_login(const char *name, const char *password)
 #endif // DEBUG
 }
 
-static inline void request(const char *url)
+static inline void request(const char *path, const char *suffix)
 {
+	char url[strlen(server_url) + strlen(path) + strlen(suffix) + 1];
+	sprintf(url, "%s%s%s", server_url, path, suffix);
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
 	curl_easy_perform(curl);
@@ -72,18 +74,12 @@ static inline void request(const char *url)
 
 void rtclient_user(const char *name)
 {
-	static const char *path = "/REST/1.0/user/";
-	char url[strlen(server_url) + strlen(path) + strlen(name) + 1];
-	sprintf(url, "%s%s%s", server_url, path, name);
-	request(url);
+	request("/REST/1.0/user/", name);
 }
 
 void rtclient_search(const char *query)
 {
-	static const char *path = "/REST/1.0/search/ticket?query=";
-	char url[strlen(server_url) + strlen(path) + strlen(query) + 1];
-	sprintf(url, "%s%s%s", server_url, path, query);
-	request(url);
+	request("/REST/1.0/search/ticket?query=", query);
 }
 
 void rtclient_cleanup()
