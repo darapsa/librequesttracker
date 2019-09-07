@@ -73,25 +73,8 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	response[realsize] = '\0';
 	char *token = strtok(response, "\n");
 	if (strstr(token, "200 Ok"))
-		while (token) {
+		while (token)
 			token = strtok(NULL, "\n");
-#ifdef DEBUG
-#ifdef ANDROID
-			__android_log_print(ANDROID_LOG_ERROR, "librtclient.so", "Token:\n%s", token);
-#else
-			fprintf(stderr, "Token:\n%s\n", token);
-#endif // ANDROID
-#endif // DEBUG
-		}
-#ifdef DEBUG
-	else {
-#ifdef ANDROID
-		__android_log_print(ANDROID_LOG_ERROR, "librtclient.so", "Not okay");
-#else
-		fprintf(stderr, "Not okay\n");
-#endif // ANDROID
-	}
-#endif
 	return realsize;
 }
 
