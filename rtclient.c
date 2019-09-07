@@ -11,6 +11,7 @@
 #include <curl/curl.h>
 #include "rtclient.h"
 
+typedef struct rt_user rt_user;
 static CURL *curl = NULL;
 static char *server_url = NULL;
 
@@ -71,10 +72,18 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	char response[realsize + 1];
 	memcpy(&response[0], contents, realsize);
 	response[realsize] = '\0';
-	char *token = strtok(response, "\n");
-	if (strstr(token, "200 Ok"))
-		while (token)
-			token = strtok(NULL, "\n");
+	char *lines[21];
+	char *line = strtok(response, "\n");
+	if (strstr(line, "200 Ok")) {
+		rt_user *user = (rt_user *)writedata;
+		user = malloc(sizeof(rt_user));
+		line = strtok(NULL, "\n");
+		while (line) {
+			printf("Line:\n%s\n", line);
+			line = strtok(NULL, "\n");
+		}
+		free(user);
+	}
 	return realsize;
 }
 
@@ -87,10 +96,13 @@ static inline void request(const char *path, const char *suffix)
 	curl_easy_perform(curl);
 }
 
-void rtclient_user(const char *name)
+rt_user *rtclient_user(const char *name)
 {
+	rt_user *user = NULL;
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, user);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, user_callback);
 	request("/REST/1.0/user/", name);
+	return user;
 }
 
 void rtclient_search(const char *query)
