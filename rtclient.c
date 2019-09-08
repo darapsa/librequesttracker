@@ -5,9 +5,8 @@
 #include <stdio.h>
 #endif // ANDROID
 #endif // DEBUG
-#include <stdbool.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <curl/curl.h>
 #include "rtclient.h"
 
@@ -83,8 +82,8 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 			lines[i++] = line;
 			line = strtok(NULL, "\n");
 		}
-		rt_user *user = (rt_user *)writedata;
-		user = malloc(sizeof(rt_user));
+		rt_user **userp = (rt_user **)writedata;
+		rt_user *user = *userp;
 		for (unsigned short i = 0; i < nproperties; i++) {
 			char *token = strtok(lines[i], ":");
 			if (!strcmp(token, "id")) {
@@ -182,7 +181,6 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 				user->disabled = (bool)atoi(++token);
 			}
 		}
-		free(user);
 	}
 
 	return realsize;
@@ -197,18 +195,44 @@ static inline void request(const char *path, const char *suffix)
 	curl_easy_perform(curl);
 }
 
-rt_user *rtclient_user(const char *name)
+bool rtclient_get_user(rt_user **user, const char *name)
 {
-	rt_user *user = NULL;
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, user);
+	*user = malloc(sizeof(rt_user));
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)user);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, user_callback);
 	request("/REST/1.0/user/", name);
-	return user;
+	return (bool)(*user);
 }
 
 void rtclient_search(const char *query)
 {
 	request("/REST/1.0/search/ticket?query=", query);
+}
+
+void rtclient_user_free(rt_user *user)
+{
+	free(user->id);
+	free(user->password);
+	free(user->name);
+	free(user->emailaddress);
+	free(user->realname);
+	free(user->nickname);
+	free(user->gecos);
+	free(user->organization);
+	free(user->address1);
+	free(user->address2);
+	free(user->city);
+	free(user->state);
+	free(user->zip);
+	free(user->country);
+	free(user->homephone);
+	free(user->workphone);
+	free(user->mobilephone);
+	free(user->pagerphone);
+	free(user->contactinfo);
+	free(user->comments);
+	free(user->signature);
+	free(user);
 }
 
 void rtclient_cleanup()

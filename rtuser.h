@@ -1,6 +1,8 @@
 #ifndef RTUSER_H
 #define RTUSER_H
 
+#include <stdbool.h>
+
 struct rt_user {
 	char *id;
 	char *password;
