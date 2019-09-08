@@ -20,6 +20,9 @@ struct rt_user {
 	char *workphone;
 	char *mobilephone;
 	char *pagerphone;
+	char *contactinfo;
+	char *comments;
+	char *signature;
 	char lang[2];
 	bool privileged;
 	bool disabled;
