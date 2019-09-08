@@ -72,18 +72,42 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	char response[realsize + 1];
 	memcpy(&response[0], contents, realsize);
 	response[realsize] = '\0';
-	char *lines[24];
+
+	static const unsigned short nproperties = 24;
+	char *lines[nproperties];
 	char *line = strtok(response, "\n");
 	if (strstr(line, "200 Ok")) {
 		rt_user *user = (rt_user *)writedata;
 		user = malloc(sizeof(rt_user));
 		line = strtok(NULL, "\n");
-		while (line) {
-			printf("Line:\n%s\n", line);
+		unsigned short i = 0;
+		while (line && i < nproperties) {
+			lines[i++] = line;
 			line = strtok(NULL, "\n");
+		}
+		for (unsigned short i = 0; i < nproperties; i++) {
+			char *token = strtok(lines[i], ":");
+#ifdef DEBUG
+#ifdef ANDROID
+			__android_log_print(ANDROID_LOG_DEBUG, "librtclient.so"
+					, "Key: %s", token);
+#else
+			fprintf(stderr, "Key: %s\n", token);
+#endif // ANDROID
+#endif // DEBUG
+			token = strtok(NULL, ":");
+#ifdef DEBUG
+#ifdef ANDROID
+			__android_log_print(ANDROID_LOG_DEBUG, "librtclient.so"
+					, "Value: %s", token);
+#else
+			fprintf(stderr, "Value: %s\n", token);
+#endif // ANDROID
+#endif // DEBUG
 		}
 		free(user);
 	}
+
 	return realsize;
 }
 
