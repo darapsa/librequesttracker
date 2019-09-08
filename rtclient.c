@@ -99,9 +99,9 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 #ifdef DEBUG
 #ifdef ANDROID
 			__android_log_print(ANDROID_LOG_DEBUG, "librtclient.so"
-					, "Value: %s", token);
+					, "Value: %s", ++token);
 #else
-			fprintf(stderr, "Value: %s\n", token);
+			fprintf(stderr, "Value: %s\n", ++token);
 #endif // ANDROID
 #endif // DEBUG
 		}
