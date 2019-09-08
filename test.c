@@ -37,7 +37,7 @@ int main(void)
 				, user->city, user->state, user->zip, user->country
 				, user->homephone, user->workphone, user->mobilephone
 				, user->pagerphone, user->contactinfo, user->comments
-				, user->signature, &user->lang[0], user->privileged
+				, user->signature, user->lang, user->privileged
 				, user->disabled);
 	free(name);
 	if (user)

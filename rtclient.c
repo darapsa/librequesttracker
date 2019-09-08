@@ -69,7 +69,7 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 {
 	size_t realsize = size * nmemb;
 	char response[realsize + 1];
-	memcpy(&response[0], contents, realsize);
+	memcpy(response, contents, realsize);
 	response[realsize] = '\0';
 
 	static const unsigned short nproperties = 24;
