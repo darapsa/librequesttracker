@@ -72,7 +72,7 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	char response[realsize + 1];
 	memcpy(&response[0], contents, realsize);
 	response[realsize] = '\0';
-	char *lines[21];
+	char *lines[24];
 	char *line = strtok(response, "\n");
 	if (strstr(line, "200 Ok")) {
 		rt_user *user = (rt_user *)writedata;
