@@ -1,4 +1,5 @@
 noinst_LIBRARIES = librtclient.a
 librtclient_a_SOURCES = \
-			rtclient.c \
-			rtclient.h
+			rtuser.h \
+			rtclient.h \
+			rtclient.c
