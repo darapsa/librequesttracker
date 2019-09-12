@@ -9,9 +9,9 @@ extern "C" {
 
 	bool rtclient_init(const char *server_url);
 	void rtclient_login(const char *name, const char *password);
-	bool rtclient_get_user(struct rt_user **userptr, const char *name);
+	bool rtclient_userget(struct rt_user **userptr, const char *name);
 	void rtclient_search(const char *query);
-	void rtclient_user_free(struct rt_user *user);
+	void rtclient_userfree(struct rt_user *user);
 	void rtclient_cleanup();
 
 #ifdef __cplusplus

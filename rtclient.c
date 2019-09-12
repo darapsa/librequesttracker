@@ -32,38 +32,6 @@ bool rtclient_init(const char *url)
 	return (bool)curl;
 }
 
-void rtclient_login(const char *name, const char *password)
-{
-	struct curl_httppost *post, *last = NULL;
-	curl_formadd(&post, &last,
-			CURLFORM_COPYNAME, "user",
-			CURLFORM_PTRCONTENTS, name,
-			CURLFORM_END);
-	curl_formadd(&post, &last,
-			CURLFORM_COPYNAME, "pass",
-			CURLFORM_PTRCONTENTS, password,
-			CURLFORM_END);
-	last = NULL;
-
-	curl_easy_setopt(curl, CURLOPT_URL, server_url);
-	curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, NULL);
-#ifdef DEBUG
-	CURLcode res =
-#endif // DEBUG
-		curl_easy_perform(curl);
-#ifdef DEBUG
-	if (res != CURLE_OK) {
-		const char *error = curl_easy_strerror(res);
-#ifdef ANDROID
-		__android_log_print(ANDROID_LOG_ERROR, "librtclient.so", "cURL perform error: %s", error);
-#else
-		fprintf(stderr, "cURL perform error: %s\n", error);
-#endif // ANDROID
-	}
-#endif // DEBUG
-}
-
 static size_t
 user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 {
@@ -71,19 +39,18 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	char response[realsize + 1];
 	memcpy(response, contents, realsize);
 	response[realsize] = '\0';
-
-	static const unsigned short nproperties = 24;
-	char *lines[nproperties];
 	char *line = strtok(response, "\n");
+	rt_user **userptr = (rt_user **)writedata;
+	rt_user *user = *userptr;
 	if (strstr(line, "200 Ok")) {
+		static const unsigned short nproperties = 24;
+		char *lines[nproperties];
 		line = strtok(NULL, "\n");
 		unsigned short i = 0;
 		while (line && i < nproperties) {
 			lines[i++] = line;
 			line = strtok(NULL, "\n");
 		}
-		rt_user **userptr = (rt_user **)writedata;
-		rt_user *user = *userptr;
 		for (unsigned short i = 0; i < nproperties; i++) {
 			char *token = strtok(lines[i], ":");
 			if (!strcmp(token, "id")) {
@@ -181,35 +148,81 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 				user->disabled = (bool)atoi(++token);
 			}
 		}
+	} else {
+#ifdef DEBUG
+		fprintf(stderr, "Status: %s\n", line);
+#endif
+		free(user);
+		user = NULL;
 	}
 
 	return realsize;
 }
 
-static inline void request(const char *path, const char *suffix)
+inline static bool request(const char *path, const char *suffix
+		, size_t (*writefunction)(void *, size_t, size_t, void *)
+		, void *writedata, struct curl_httppost *post)
 {
 	char url[strlen(server_url) + strlen(path) + strlen(suffix) + 1];
 	sprintf(url, "%s%s%s", server_url, path, suffix);
 	curl_easy_setopt(curl, CURLOPT_URL, url);
-	curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
-	curl_easy_perform(curl);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunction);
+	if (writedata)
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, writedata);
+	else
+		curl_easy_setopt(curl, CURLOPT_WRITEDATA, stdout);
+	if (post)
+		curl_easy_setopt(curl, CURLOPT_HTTPPOST, post);
+	else
+		curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+
+#ifdef DEBUG
+	CURLcode res =
+#endif // DEBUG
+		curl_easy_perform(curl);
+#ifdef DEBUG
+	if (res != CURLE_OK) {
+		const char *error = curl_easy_strerror(res);
+#ifdef ANDROID
+		__android_log_print(ANDROID_LOG_ERROR, "librtclient", "%s: %s"
+				, __func__, error);
+#else
+		fprintf(stderr, "%s: %s\n", __func__, error);
+#endif // ANDROID
+#endif // DEBUG
+	}
 }
 
-bool rtclient_get_user(rt_user **userptr, const char *name)
+void rtclient_login(const char *name, const char *password)
+{
+	struct curl_httppost *post, *last = NULL;
+	curl_formadd(&post, &last
+			, CURLFORM_COPYNAME, "user"
+			, CURLFORM_PTRCONTENTS, name
+			, CURLFORM_END);
+	curl_formadd(&post, &last
+			, CURLFORM_COPYNAME, "pass"
+			, CURLFORM_PTRCONTENTS, password
+			, CURLFORM_END);
+	last = NULL;
+	request("", "", NULL, NULL, post);
+	curl_formfree(post);
+	post = NULL;
+}
+
+bool rtclient_userget(rt_user **userptr, const char *name)
 {
 	*userptr = malloc(sizeof(rt_user));
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)userptr);
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, user_callback);
-	request("/REST/1.0/user/", name);
-	return (bool)(*userptr);
+	request("/REST/1.0/user/", name, user_callback, (void *)userptr, NULL);
+	return (bool)*userptr;
 }
 
 void rtclient_search(const char *query)
 {
-	request("/REST/1.0/search/ticket?query=", query);
+	request("/REST/1.0/search/ticket?query=", query, NULL, NULL, NULL);
 }
 
-void rtclient_user_free(rt_user *user)
+void rtclient_userfree(rt_user *user)
 {
 	free(user->id);
 	free(user->password);

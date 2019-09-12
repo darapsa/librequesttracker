@@ -29,7 +29,7 @@ int main(void)
 	free(pass);
 
 	struct rt_user *user = NULL;
-	if (rtclient_get_user(&user, name))
+	if (rtclient_userget(&user, name))
 		printf("id: %s\npassword: %s\nname: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\ngecos: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\nlang: %s\nprivileged: %d\ndisabled: %d\n"
 				, user->id, user->password, user->name, user->emailaddress
 				, user->realname, user->nickname, user->gecos
@@ -41,7 +41,7 @@ int main(void)
 				, user->disabled);
 	free(name);
 	if (user)
-		rtclient_user_free(user);
+		rtclient_userfree(user);
 
 	rtclient_cleanup();
 
