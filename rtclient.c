@@ -242,6 +242,7 @@ void rtclient_userfree(rt_user *user)
 	free(user->comments);
 	free(user->signature);
 	free(user);
+	user = NULL;
 }
 
 void rtclient_cleanup()
