@@ -149,11 +149,8 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 			}
 		}
 	} else {
-#ifdef DEBUG
-		fprintf(stderr, "Status: %s\n", line);
-#endif
-		free(user);
-		user = NULL;
+		free(*userptr);
+		*userptr = NULL;
 	}
 
 	return realsize;
@@ -210,11 +207,10 @@ void rtclient_login(const char *name, const char *password)
 	post = NULL;
 }
 
-bool rtclient_userget(rt_user **userptr, const char *name)
+void rtclient_userget(rt_user **userptr, const char *name)
 {
 	*userptr = malloc(sizeof(rt_user));
 	request("/REST/1.0/user/", name, user_callback, (void *)userptr, NULL);
-	return (bool)*userptr;
 }
 
 void rtclient_search(const char *query)
