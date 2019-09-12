@@ -82,8 +82,8 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 			lines[i++] = line;
 			line = strtok(NULL, "\n");
 		}
-		rt_user **userp = (rt_user **)writedata;
-		rt_user *user = *userp;
+		rt_user **userptr = (rt_user **)writedata;
+		rt_user *user = *userptr;
 		for (unsigned short i = 0; i < nproperties; i++) {
 			char *token = strtok(lines[i], ":");
 			if (!strcmp(token, "id")) {
@@ -195,13 +195,13 @@ static inline void request(const char *path, const char *suffix)
 	curl_easy_perform(curl);
 }
 
-bool rtclient_get_user(rt_user **user, const char *name)
+bool rtclient_get_user(rt_user **userptr, const char *name)
 {
-	*user = malloc(sizeof(rt_user));
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)user);
+	*userptr = malloc(sizeof(rt_user));
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)userptr);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, user_callback);
 	request("/REST/1.0/user/", name);
-	return (bool)(*user);
+	return (bool)(*userptr);
 }
 
 void rtclient_search(const char *query)
