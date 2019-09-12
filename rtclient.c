@@ -156,7 +156,7 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	return realsize;
 }
 
-inline static bool request(const char *path, const char *suffix
+inline static void request(const char *path, const char *suffix
 		, size_t (*writefunction)(void *, size_t, size_t, void *)
 		, void *writedata, struct curl_httppost *post)
 {
