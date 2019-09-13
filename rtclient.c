@@ -11,6 +11,7 @@
 #include "rtclient.h"
 
 typedef struct rt_user rt_user;
+typedef struct rt_ticketlist rt_ticketlist;
 static CURL *curl = NULL;
 static char *server_url = NULL;
 
@@ -39,8 +40,10 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	char response[realsize + 1];
 	memcpy(response, contents, realsize);
 	response[realsize] = '\0';
+
 	rt_user **userptr = (rt_user **)writedata;
 	rt_user *user = *userptr;
+
 	char *linesaveptr = NULL;
 	char *line = strtok_r(response, "\n", &linesaveptr);
 	if (strstr(line, "200 Ok")) {
@@ -160,28 +163,33 @@ search_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	response[realsize] = '\0';
 	char lines[strlen(response) + 1];
 	strcpy(lines, response);
+	rt_ticketlist **listptr = (rt_ticketlist **)writedata;
+
 	char *line = strtok(response, "\n");
 	if (strstr(line, "200 Ok")) {
-		unsigned short nlines = 0;
+		(*listptr)->length = 0;
 		line = strtok(NULL, "\n");
 		do {
-			nlines++;
+			(*listptr)->length++;
 		} while ((line = strtok(NULL, "\n")));
-		char **tickets = malloc(nlines * sizeof(char *));
+		rt_ticketlist *ptr = realloc(*listptr, sizeof(*listptr)
+				+ (*listptr)->length * sizeof(char *));
+		*listptr = ptr;
+		rt_ticketlist *list = *listptr;
 		char *linesaveptr = NULL;
 		line = strtok_r(lines, "\n", &linesaveptr);
 		line = strtok_r(NULL, "\n", &linesaveptr);
 		char *tokensaveptr = NULL, *token = NULL;
-		for (unsigned short i = 0; i < nlines; i++) {
+		for (unsigned int i = 0; i < list->length; i++) {
 			token = strtok_r(line, ":", &tokensaveptr);
 			token = strtok_r(NULL, ":", &tokensaveptr);
-			tickets[i] = malloc(strlen(token));
-			strcpy(tickets[i], ++token);
-			printf("Ticket %d: %s\n", i, tickets[i]);
-			free(tickets[i]);
+			list->tickets[i] = malloc(strlen(token));
+			strcpy(list->tickets[i], ++token);
 			line = strtok_r(NULL, "\n", &linesaveptr);
 		}
-		free(tickets);
+	} else {
+		free(*listptr);
+		*listptr = NULL;
 	}
 
 	return realsize;
@@ -244,10 +252,11 @@ void rtclient_userget(rt_user **userptr, const char *name)
 	request("/REST/1.0/user/", name, user_callback, (void *)userptr, NULL);
 }
 
-void rtclient_search(const char *query)
+void rtclient_search(rt_ticketlist **listptr, const char *query)
 {
-	request("/REST/1.0/search/ticket?query=", query, search_callback, NULL
-			, NULL);
+	*listptr = malloc(sizeof(rt_ticketlist));
+	request("/REST/1.0/search/ticket?query=", query, search_callback
+			, (void *)listptr, NULL);
 }
 
 void rtclient_userfree(rt_user *user)
