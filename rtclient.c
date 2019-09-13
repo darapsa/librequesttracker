@@ -181,8 +181,8 @@ inline static void request(const char *path, const char *suffix
 #else
 		fprintf(stderr, "%s: %s\n", __func__, error);
 #endif // ANDROID
-#endif // DEBUG
 	}
+#endif // DEBUG
 }
 
 void rtclient_login(const char *name, const char *password)
