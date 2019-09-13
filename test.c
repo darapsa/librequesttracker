@@ -47,16 +47,13 @@ int main(void)
 		static const char *prefix = "Owner='";
 		char query[strlen(prefix) + strlen(name) + 2];
 		sprintf(query, "%s%s'", prefix, name);
-		rtclient_search(&list, query);
+		rtclient_ticketssearch(&list, query);
 		if (list) {
-			printf("List length = %d\n", list->length);
 			for (unsigned short i = 0; i < list->length; i++) {
 				char *ticket = list->tickets[i];
 				printf("Ticket %d: %s\n", i, ticket);
-				if (ticket)
-					free(ticket);
 			}
-			free(list);
+			rtclient_ticketsfree(list);
 		}
 	}
 	free(name);
