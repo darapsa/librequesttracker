@@ -151,6 +151,42 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	return realsize;
 }
 
+static size_t
+search_callback(void *contents, size_t size, size_t nmemb, void *writedata)
+{
+	size_t realsize = size * nmemb;
+	char response[realsize + 1];
+	memcpy(response, contents, realsize);
+	response[realsize] = '\0';
+	char lines[strlen(response) + 1];
+	strcpy(lines, response);
+	char *line = strtok(response, "\n");
+	if (strstr(line, "200 Ok")) {
+		unsigned short nlines = 0;
+		line = strtok(NULL, "\n");
+		do {
+			nlines++;
+		} while ((line = strtok(NULL, "\n")));
+		char **tickets = malloc(nlines * sizeof(char *));
+		char *linesaveptr = NULL;
+		line = strtok_r(lines, "\n", &linesaveptr);
+		line = strtok_r(NULL, "\n", &linesaveptr);
+		char *tokensaveptr = NULL, *token = NULL;
+		for (unsigned short i = 0; i < nlines; i++) {
+			token = strtok_r(line, ":", &tokensaveptr);
+			token = strtok_r(NULL, ":", &tokensaveptr);
+			tickets[i] = malloc(strlen(token));
+			strcpy(tickets[i], ++token);
+			printf("Ticket %d: %s\n", i, tickets[i]);
+			free(tickets[i]);
+			line = strtok_r(NULL, "\n", &linesaveptr);
+		}
+		free(tickets);
+	}
+
+	return realsize;
+}
+
 inline static void request(const char *path, const char *suffix
 		, size_t (*writefunction)(void *, size_t, size_t, void *)
 		, void *writedata, struct curl_httppost *post)
@@ -210,7 +246,8 @@ void rtclient_userget(rt_user **userptr, const char *name)
 
 void rtclient_search(const char *query)
 {
-	request("/REST/1.0/search/ticket?query=", query, NULL, NULL, NULL);
+	request("/REST/1.0/search/ticket?query=", query, search_callback, NULL
+			, NULL);
 }
 
 void rtclient_userfree(rt_user *user)
