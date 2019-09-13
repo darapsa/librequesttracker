@@ -45,9 +45,9 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	char *line = strtok_r(response, "\n", &linesaveptr);
 	if (strstr(line, "200 Ok")) {
 		line = strtok_r(NULL, "\n", &linesaveptr);
+		char *tokensaveptr = NULL, *token = NULL;
 		do {
-			char *tokensaveptr = NULL;
-			char *token = strtok_r(line, ":", &tokensaveptr);
+			token = strtok_r(line, ":", &tokensaveptr);
 			if (!strcmp(token, "id")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->id = malloc(strlen(token));
