@@ -39,115 +39,110 @@ user_callback(void *contents, size_t size, size_t nmemb, void *writedata)
 	char response[realsize + 1];
 	memcpy(response, contents, realsize);
 	response[realsize] = '\0';
-	char *line = strtok(response, "\n");
 	rt_user **userptr = (rt_user **)writedata;
 	rt_user *user = *userptr;
+	char *linesaveptr = NULL;
+	char *line = strtok_r(response, "\n", &linesaveptr);
 	if (strstr(line, "200 Ok")) {
-		static const unsigned short nproperties = 24;
-		char *lines[nproperties];
-		line = strtok(NULL, "\n");
-		unsigned short i = 0;
-		while (line && i < nproperties) {
-			lines[i++] = line;
-			line = strtok(NULL, "\n");
-		}
-		for (unsigned short i = 0; i < nproperties; i++) {
-			char *token = strtok(lines[i], ":");
+		line = strtok_r(NULL, "\n", &linesaveptr);
+		do {
+			char *tokensaveptr = NULL;
+			char *token = strtok_r(line, ":", &tokensaveptr);
 			if (!strcmp(token, "id")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->id = malloc(strlen(token));
 				strcpy(user->id, ++token);
 			} else if (!strcmp(token, "Password")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->password = malloc(strlen(token));
 				strcpy(user->password, ++token);
 			} else if (!strcmp(token, "Name")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->name = malloc(strlen(token));
 				strcpy(user->name, ++token);
 			} else if (!strcmp(token, "EmailAddress")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->emailaddress = malloc(strlen(token));
 				strcpy(user->emailaddress, ++token);
 			} else if (!strcmp(token, "RealName")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->realname = malloc(strlen(token));
 				strcpy(user->realname, ++token);
 			} else if (!strcmp(token, "NickName")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->nickname = malloc(strlen(token));
 				strcpy(user->nickname, ++token);
 			} else if (!strcmp(token, "Gecos")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->gecos = malloc(strlen(token));
 				strcpy(user->gecos, ++token);
 			} else if (!strcmp(token, "Organization")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->organization = malloc(strlen(token));
 				strcpy(user->organization, ++token);
 			} else if (!strcmp(token, "Address1")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->address1 = malloc(strlen(token));
 				strcpy(user->address1, ++token);
 			} else if (!strcmp(token, "Address2")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->address2 = malloc(strlen(token));
 				strcpy(user->address2, ++token);
 			} else if (!strcmp(token, "City")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->city = malloc(strlen(token));
 				strcpy(user->city, ++token);
 			} else if (!strcmp(token, "State")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->state = malloc(strlen(token));
 				strcpy(user->state, ++token);
 			} else if (!strcmp(token, "Zip")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->zip = malloc(strlen(token));
 				strcpy(user->zip, ++token);
 			} else if (!strcmp(token, "Country")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->country = malloc(strlen(token));
 				strcpy(user->country, ++token);
 			} else if (!strcmp(token, "HomePhone")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->homephone = malloc(strlen(token));
 				strcpy(user->homephone, ++token);
 			} else if (!strcmp(token, "WorkPhone")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->workphone = malloc(strlen(token));
 				strcpy(user->workphone, ++token);
 			} else if (!strcmp(token, "MobilePhone")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->mobilephone = malloc(strlen(token));
 				strcpy(user->mobilephone, ++token);
 			} else if (!strcmp(token, "PagerPhone")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->pagerphone = malloc(strlen(token));
 				strcpy(user->pagerphone, ++token);
 			} else if (!strcmp(token, "ContactInfo")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->contactinfo = malloc(strlen(token));
 				strcpy(user->contactinfo, ++token);
 			} else if (!strcmp(token, "Comments")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->comments = malloc(strlen(token));
 				strcpy(user->comments, ++token);
 			} else if (!strcmp(token, "Signature")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->signature = malloc(strlen(token));
 				strcpy(user->signature, ++token);
 			} else if (!strcmp(token, "Lang")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				strncpy(user->lang, ++token, 2);
 			} else if (!strcmp(token, "Privileged")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->privileged = (bool)atoi(++token);
 			} else if (!strcmp(token, "Disabled")) {
-				token = strtok(NULL, ":");
+				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->disabled = (bool)atoi(++token);
 			}
-		}
+		} while ((line = strtok_r(NULL, "\n", &linesaveptr)));
 	} else {
 		free(*userptr);
 		*userptr = NULL;
