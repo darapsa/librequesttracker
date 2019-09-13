@@ -53,6 +53,8 @@ int main(void)
 			for (unsigned short i = 0; i < list->length; i++) {
 				char *ticket = list->tickets[i];
 				printf("Ticket %d: %s\n", i, ticket);
+				if (ticket)
+					free(ticket);
 			}
 			free(list);
 		}
