@@ -246,20 +246,20 @@ void rtclient_login(const char *name, const char *password)
 	post = NULL;
 }
 
-void rtclient_userget(rt_user **userptr, const char *name)
+void rtclient_user_show(rt_user **userptr, const char *name)
 {
 	*userptr = malloc(sizeof(rt_user));
 	request("/REST/1.0/user/", name, user_callback, (void *)userptr, NULL);
 }
 
-void rtclient_ticketssearch(rt_ticketlist **listptr, const char *query)
+void rtclient_ticket_search(rt_ticketlist **listptr, const char *query)
 {
 	*listptr = malloc(sizeof(rt_ticketlist));
 	request("/REST/1.0/search/ticket?query=", query, search_callback
 			, (void *)listptr, NULL);
 }
 
-void rtclient_userfree(rt_user *user)
+void rtclient_user_free(rt_user *user)
 {
 	free(user->id);
 	free(user->password);
@@ -286,7 +286,7 @@ void rtclient_userfree(rt_user *user)
 	user = NULL;
 }
 
-void rtclient_ticketsfree(rt_ticketlist *list)
+void rtclient_ticket_freelist(rt_ticketlist *list)
 {
 	for (unsigned short i = 0; i < list->length; i++)
 		free(list->tickets[i]);

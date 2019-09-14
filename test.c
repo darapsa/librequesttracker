@@ -29,7 +29,7 @@ int main(void)
 	free(pass);
 
 	struct rt_user *user = NULL;
-	rtclient_userget(&user, name);
+	rtclient_user_show(&user, name);
 
 	if (user) {
 		printf("id: %s\npassword: %s\nname: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\ngecos: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\nlang: %s\nprivileged: %d\ndisabled: %d\n"
@@ -41,19 +41,19 @@ int main(void)
 				, user->pagerphone, user->contactinfo, user->comments
 				, user->signature, user->lang, user->privileged
 				, user->disabled);
-		rtclient_userfree(user);
+		rtclient_user_free(user);
 
 		struct rt_ticketlist *list = NULL;
 		static const char *prefix = "Owner='";
 		char query[strlen(prefix) + strlen(name) + 2];
 		sprintf(query, "%s%s'", prefix, name);
-		rtclient_ticketssearch(&list, query);
+		rtclient_ticket_search(&list, query);
 		if (list) {
 			for (unsigned short i = 0; i < list->length; i++) {
 				char *ticket = list->tickets[i];
 				printf("Ticket %d: %s\n", i, ticket);
 			}
-			rtclient_ticketsfree(list);
+			rtclient_ticket_freelist(list);
 		}
 	}
 	free(name);
