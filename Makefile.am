@@ -8,6 +8,7 @@ librtclient_a_SOURCES = \
 			user.c \
 			ticket.c \
 			client.c
+librtclient_a_CFLAGS = -fPIC
 
 bin_PROGRAMS = rtclienttest
 rtclienttest_SOURCES = main.c
