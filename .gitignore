@@ -18,5 +18,5 @@ configure
 depcomp
 install-sh
 missing
+rtclienttest
 stamp-h1
-test

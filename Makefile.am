@@ -5,7 +5,7 @@ librtclient_a_SOURCES = \
 			rtclient/rtclient.h \
 			rtclient.c
 
-bin_PROGRAMS = test
-test_SOURCES = test.c
-test_LDADD = librtclient.a
-test_LDFLAGS = -lcurl
+bin_PROGRAMS = rtclienttest
+rtclienttest_SOURCES = main.c
+rtclienttest_LDADD = librtclient.a
+rtclienttest_LDFLAGS = -lcurl
