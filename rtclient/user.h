@@ -1,5 +1,5 @@
-#ifndef RTUSER_H
-#define RTUSER_H
+#ifndef RTCLIENT_USER_H
+#define RTCLIENT_USER_H
 
 #include <stdbool.h>
 
@@ -30,4 +30,4 @@ struct rt_user {
 	bool disabled;
 };
 
-#endif // RTUSER_H
+#endif // RTCLIENT_USER_H
