@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <curl/curl.h>
-#include "rtclient.h"
+#include "rtclient/rtclient.h"
 
 typedef struct rt_user rt_user;
 typedef struct rt_ticketlist rt_ticketlist;
