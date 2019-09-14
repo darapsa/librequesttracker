@@ -3,7 +3,7 @@ librtclient_a_SOURCES = \
 			rtclient/user.h \
 			rtclient/ticket.h \
 			rtclient/rtclient.h \
-			rtclient.c
+			client.c
 
 bin_PROGRAMS = rtclienttest
 rtclienttest_SOURCES = main.c
