@@ -30,4 +30,15 @@ struct rt_user {
 	bool disabled;
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+	void rtclient_user_show(struct rt_user **userptr, const char *name);
+	void rtclient_user_free(struct rt_user *user);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif // RTCLIENT_USER_H
