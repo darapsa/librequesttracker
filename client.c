@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <string.h>
 #include "rtclient/request.h"
 #include "rtclient/rtclient.h"
 

@@ -1,12 +1,4 @@
-#ifdef DEBUG
-#ifdef ANDROID
-#include <android/log.h>
-#else
-#include <stdio.h>
-#endif // ANDROID
-#endif // DEBUG
 #include <stdlib.h>
-#include <string.h>
 #include "rtclient/request.h"
 #include "rtclient/ticket.h"
 
