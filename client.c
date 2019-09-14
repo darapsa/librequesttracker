@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <string.h>
-#include "rtclient/common.h"
+#include "rtclient/request.h"
 #include "rtclient/rtclient.h"
+
+CURL *curl = NULL;
+char *server_url = NULL;
 
 bool rtclient_init(const char *url)
 {

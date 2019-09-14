@@ -1,3 +1,6 @@
+#ifndef RTCLIENT_REQUEST_H
+#define RTCLIENT_REQUEST_H
+
 #ifdef DEBUG
 #ifdef ANDROID
 #include <android/log.h>
@@ -6,10 +9,10 @@
 #endif // ANDROID
 #endif // DEBUG
 #include <string.h>
-#include "rtclient/common.h"
+#include <curl/curl.h>
 
-CURL *curl = NULL;
-char *server_url = NULL;
+extern CURL *curl;
+extern char *server_url;
 
 inline void request(const char *path, const char *suffix
 		, size_t (*writefunction)(void *, size_t, size_t, void *)
@@ -44,3 +47,4 @@ inline void request(const char *path, const char *suffix
 	}
 #endif // DEBUG
 }
+#endif // RTCLIENT_REQUEST_H

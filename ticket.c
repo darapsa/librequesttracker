@@ -7,7 +7,7 @@
 #endif // DEBUG
 #include <stdlib.h>
 #include <string.h>
-#include "rtclient/common.h"
+#include "rtclient/request.h"
 #include "rtclient/ticket.h"
 
 typedef struct rt_ticketlist rt_ticketlist;

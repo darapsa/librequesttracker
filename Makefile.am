@@ -1,10 +1,10 @@
 noinst_LIBRARIES = librtclient.a
 librtclient_a_SOURCES = \
-			rtclient/common.h \
+			rtclient/request.h \
 			rtclient/user.h \
 			rtclient/ticket.h \
 			rtclient/rtclient.h \
-			common.c \
+			request.c \
 			user.c \
 			ticket.c \
 			client.c
