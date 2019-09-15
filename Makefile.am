@@ -3,7 +3,7 @@ librtclient_a_SOURCES = \
 			rtclient/request.h \
 			rtclient/user.h \
 			rtclient/ticket.h \
-			rtclient/rtclient.h \
+			rtclient/client.h \
 			request.c \
 			user.c \
 			ticket.c \
