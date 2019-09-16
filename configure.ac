@@ -1,4 +1,4 @@
-AC_INIT([rtclient], [0.0], [rt@darapsa.co.id])
+AC_INIT([librtclient], [0.0], [rt@darapsa.co.id])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
 AC_PROG_RANLIB
