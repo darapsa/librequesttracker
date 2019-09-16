@@ -15,7 +15,7 @@ bool rtclient_init(const char *url)
 		curl_easy_setopt(curl, CURLOPT_REFERER, url);
 #ifdef DEBUG
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
-#endif // DEBUG
+#endif
 		server_url = malloc(strlen(url) + 1);
 		strcpy(server_url, url);
 	}

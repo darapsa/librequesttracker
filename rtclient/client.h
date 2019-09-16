@@ -8,7 +8,7 @@
 extern "C" {
 #endif
 
-	bool rtclient_init(const char *server_url);
+	bool rtclient_init(const char *url);
 	void rtclient_login(const char *name, const char *password);
 	void rtclient_cleanup();
 
