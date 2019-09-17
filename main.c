@@ -32,14 +32,31 @@ int main(void)
 	rtclient_user_show(&user, name);
 
 	if (user) {
-		printf("id: %s\npassword: %s\nname: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\ngecos: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\nlang: %s\nprivileged: %d\ndisabled: %d\n"
-				, user->id, user->password, user->name, user->emailaddress
-				, user->realname, user->nickname, user->gecos
-				, user->organization, user->address1, user->address2
-				, user->city, user->state, user->zip, user->country
-				, user->homephone, user->workphone, user->mobilephone
-				, user->pagerphone, user->contactinfo, user->comments
-				, user->signature, user->lang, user->privileged
+		printf("id: %s\nname: %s\npassword: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\ngecos: %s\nlang: %d\ntimezone: %d\nprivileged: %d\ndisabled: %d\n"
+				, user->id
+				, user->name
+				, user->password
+				, user->emailaddress
+				, user->realname
+				, user->nickname
+				, user->organization
+				, user->address1
+				, user->address2
+				, user->city
+				, user->state
+				, user->zip
+				, user->country
+				, user->homephone
+				, user->workphone
+				, user->mobilephone
+				, user->pagerphone
+				, user->contactinfo
+				, user->comments
+				, user->signature
+				, user->gecos
+				, user->lang
+				, user->timezone
+				, user->privileged
 				, user->disabled);
 		rtclient_user_free(user);
 

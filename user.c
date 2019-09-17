@@ -14,6 +14,31 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 
 	rt_user **userptr = (rt_user **)writedata;
 	rt_user *user = *userptr;
+	user->id = NULL;
+	user->name = NULL;
+	user->password = NULL;
+	user->emailaddress = NULL;
+	user->realname = NULL;
+	user->nickname = NULL;
+	user->organization = NULL;
+	user->address1 = NULL;
+	user->address2 = NULL;
+	user->city = NULL;
+	user->state = NULL;
+	user->zip = NULL;
+	user->country = NULL;
+	user->homephone = NULL;
+	user->workphone = NULL;
+	user->mobilephone = NULL;
+	user->pagerphone = NULL;
+	user->contactinfo = NULL;
+	user->comments = NULL;
+	user->signature = NULL;
+	user->gecos = NULL;
+	user->lang = RT_LANG_NONE;
+	user->timezone = RT_TIMEZONE_NONE;
+	user->privileged = false;
+	user->disabled = true;
 
 	char *linesaveptr = NULL;
 	char *line = strtok_r(response, "\n", &linesaveptr);
@@ -106,9 +131,6 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->signature = malloc(strlen(token));
 				strcpy(user->signature, ++token);
-			} else if (!strcmp(token, "Lang")) {
-				token = strtok_r(NULL, ":", &tokensaveptr);
-				strncpy(user->lang, ++token, 2);
 			} else if (!strcmp(token, "Privileged")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->privileged = (bool)atoi(++token);
@@ -259,27 +281,48 @@ void rtclient_user_new(const char *name
 
 void rtclient_user_free(rt_user *user)
 {
-	free(user->id);
-	free(user->password);
-	free(user->name);
-	free(user->emailaddress);
-	free(user->realname);
-	free(user->nickname);
-	free(user->gecos);
-	free(user->organization);
-	free(user->address1);
-	free(user->address2);
-	free(user->city);
-	free(user->state);
-	free(user->zip);
-	free(user->country);
-	free(user->homephone);
-	free(user->workphone);
-	free(user->mobilephone);
-	free(user->pagerphone);
-	free(user->contactinfo);
-	free(user->comments);
-	free(user->signature);
+	if (user->id)
+		free(user->id);
+	if (user->name)
+		free(user->name);
+	if (user->password)
+		free(user->password);
+	if (user->emailaddress)
+		free(user->emailaddress);
+	if (user->realname)
+		free(user->realname);
+	if (user->nickname)
+		free(user->nickname);
+	if (user->organization)
+		free(user->organization);
+	if (user->address1)
+		free(user->address1);
+	if (user->address2)
+		free(user->address2);
+	if (user->city)
+		free(user->city);
+	if (user->state)
+		free(user->state);
+	if (user->zip)
+		free(user->zip);
+	if (user->country)
+		free(user->country);
+	if (user->homephone)
+		free(user->homephone);
+	if (user->workphone)
+		free(user->workphone);
+	if (user->mobilephone)
+		free(user->mobilephone);
+	if (user->pagerphone)
+		free(user->pagerphone);
+	if (user->contactinfo)
+		free(user->contactinfo);
+	if (user->comments)
+		free(user->comments);
+	if (user->signature)
+		free(user->signature);
+	if (user->gecos)
+		free(user->gecos);
 	free(user);
 	user = NULL;
 }

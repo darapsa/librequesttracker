@@ -412,12 +412,11 @@ enum rt_timezone {
 
 struct rt_user {
 	char *id;
-	char *password;
 	char *name;
+	char *password;
 	char *emailaddress;
 	char *realname;
 	char *nickname;
-	char *gecos;
 	char *organization;
 	char *address1;
 	char *address2;
@@ -432,7 +431,9 @@ struct rt_user {
 	char *contactinfo;
 	char *comments;
 	char *signature;
-	char lang[2];
+	char *gecos;
+	enum rt_lang lang;
+	enum rt_timezone timezone;
 	bool privileged;
 	bool disabled;
 };
