@@ -4,7 +4,8 @@
 #include <stdbool.h>
 
 enum rt_lang {
-	RT_LANG_ar
+	RT_LANG_NONE = 0
+		, RT_LANG_ar
 		, RT_LANG_eu
 		, RT_LANG_nb
 		, RT_LANG_bg
@@ -46,7 +47,8 @@ enum rt_lang {
 };
 
 enum rt_timezone {
-	RT_TIMEZONE_Africa_Abidjan
+	RT_TIMEZONE_NONE = 0
+		, RT_TIMEZONE_Africa_Abidjan
 		, RT_TIMEZONE_Africa_Accra
 		, RT_TIMEZONE_Africa_Algiers
 		, RT_TIMEZONE_Africa_Bissau
@@ -440,8 +442,7 @@ extern "C" {
 #endif
 
 	void rtclient_user_show(struct rt_user **userptr, const char *name);
-	void rtclient_user_new(
-			const char *name
+	void rtclient_user_new(const char *name
 			, const char *emailaddress
 			, const char *realname
 			, const char *nickname
@@ -464,8 +465,7 @@ extern "C" {
 			, const char *homephone
 			, const char *workphone
 			, const char *mobilephone
-			, const char *pagerphone
-			);
+			, const char *pagerphone);
 	void rtclient_user_free(struct rt_user *user);
 
 #ifdef __cplusplus
