@@ -14,31 +14,6 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 
 	rtclient_user **userptr = (rtclient_user **)writedata;
 	rtclient_user *user = *userptr;
-	user->id = NULL;
-	user->name = NULL;
-	user->password = NULL;
-	user->emailaddress = NULL;
-	user->realname = NULL;
-	user->nickname = NULL;
-	user->organization = NULL;
-	user->address1 = NULL;
-	user->address2 = NULL;
-	user->city = NULL;
-	user->state = NULL;
-	user->zip = NULL;
-	user->country = NULL;
-	user->homephone = NULL;
-	user->workphone = NULL;
-	user->mobilephone = NULL;
-	user->pagerphone = NULL;
-	user->contactinfo = NULL;
-	user->comments = NULL;
-	user->signature = NULL;
-	user->gecos = NULL;
-	user->lang = RTCLIENT_LANG_NONE;
-	user->timezone = RTCLIENT_TIMEZONE_NONE;
-	user->privileged = false;
-	user->disabled = true;
 
 	char *linesaveptr = NULL;
 	char *line = strtok_r(response, "\n", &linesaveptr);
@@ -153,6 +128,32 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 void rtclient_user_show(rtclient_user **userptr, const char *name)
 {
 	*userptr = malloc(sizeof(rtclient_user));
+	rtclient_user *user = *userptr;
+	user->id = NULL;
+	user->name = NULL;
+	user->password = NULL;
+	user->emailaddress = NULL;
+	user->realname = NULL;
+	user->nickname = NULL;
+	user->organization = NULL;
+	user->address1 = NULL;
+	user->address2 = NULL;
+	user->city = NULL;
+	user->state = NULL;
+	user->zip = NULL;
+	user->country = NULL;
+	user->homephone = NULL;
+	user->workphone = NULL;
+	user->mobilephone = NULL;
+	user->pagerphone = NULL;
+	user->contactinfo = NULL;
+	user->comments = NULL;
+	user->signature = NULL;
+	user->gecos = NULL;
+	user->lang = RTCLIENT_LANG_NONE;
+	user->timezone = RTCLIENT_TIMEZONE_NONE;
+	user->privileged = false;
+	user->disabled = true;
 	request("/REST/1.0/user/", name, show_callback, (void *)userptr, NULL);
 }
 
