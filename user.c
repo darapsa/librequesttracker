@@ -162,22 +162,14 @@ void rtclient_user_new(const char *name
 	size_t length = 0;
 	if (name && strcmp(name, ""))
 		length += strlen("name: \n") + strlen(name);
+	if (password && strcmp(password, ""))
+		length += strlen("password: \n") + strlen(password);
 	if (emailaddress && strcmp(emailaddress, ""))
 		length += strlen("emailaddress: \n") + strlen(emailaddress);
 	if (realname && strcmp(realname, ""))
 		length += strlen("realname: \n") + strlen(realname);
 	if (nickname && strcmp(nickname, ""))
 		length += strlen("nickname: \n") + strlen(nickname);
-	if (gecos && strcmp(gecos, ""))
-		length += strlen("gecos: \n") + strlen(gecos);
-	if (contactinfo && strcmp(contactinfo, ""))
-		length += strlen("contactinfo: \n") + strlen(contactinfo);
-	if (password && strcmp(password, ""))
-		length += strlen("password: \n") + strlen(password);
-	if (comments && strcmp(comments, ""))
-		length += strlen("comments: \n") + strlen(comments);
-	if (signature && strcmp(signature, ""))
-		length += strlen("signature: \n") + strlen(signature);
 	if (organization && strcmp(organization, ""))
 		length += strlen("organization: \n") + strlen(organization);
 	if (address1 && strcmp(address1, ""))
@@ -200,26 +192,26 @@ void rtclient_user_new(const char *name
 		length += strlen("mobilephone: \n") + strlen(mobilephone);
 	if (pagerphone && strcmp(pagerphone, ""))
 		length += strlen("pagerphone: \n") + strlen(pagerphone);
+	if (contactinfo && strcmp(contactinfo, ""))
+		length += strlen("contactinfo: \n") + strlen(contactinfo);
+	if (comments && strcmp(comments, ""))
+		length += strlen("comments: \n") + strlen(comments);
+	if (signature && strcmp(signature, ""))
+		length += strlen("signature: \n") + strlen(signature);
+	if (gecos && strcmp(gecos, ""))
+		length += strlen("gecos: \n") + strlen(gecos);
 
-	char content[length + strlen("privileged: \nenabled: \n") + 3];
+	char content[length + strlen("privileged: \ndisabled: \n") + 3];
 	if (name && strcmp(name, ""))
 		sprintf(content, "%sname: %s\n", content, name);
+	if (password && strcmp(password, ""))
+		sprintf(content, "%spassword: %s\n", content, password);
 	if (emailaddress && strcmp(emailaddress, ""))
 		sprintf(content, "%semailaddress: %s\n", content, emailaddress);
 	if (realname && strcmp(realname, ""))
 		sprintf(content, "%srealname: %s\n", content, realname);
 	if (nickname && strcmp(nickname, ""))
 		sprintf(content, "%snickname: %s\n", content, nickname);
-	if (gecos && strcmp(gecos, ""))
-		sprintf(content, "%sgecos: %s\n", content, gecos);
-	if (contactinfo && strcmp(contactinfo, ""))
-		sprintf(content, "%scontactinfo: %s\n", content, contactinfo);
-	if (password && strcmp(password, ""))
-		sprintf(content, "%spassword: %s\n", content, password);
-	if (comments && strcmp(comments, ""))
-		sprintf(content, "%scomments: %s\n", content, comments);
-	if (signature && strcmp(signature, ""))
-		sprintf(content, "%ssignature: %s\n", content, signature);
 	if (organization && strcmp(organization, ""))
 		sprintf(content, "%sorganization: %s\n", content, organization);
 	if (address1 && strcmp(address1, ""))
@@ -242,6 +234,16 @@ void rtclient_user_new(const char *name
 		sprintf(content, "%smobilephone: %s\n", content, mobilephone);
 	if (pagerphone && strcmp(pagerphone, ""))
 		sprintf(content, "%spagerphone: %s\n", content, pagerphone);
+	if (contactinfo && strcmp(contactinfo, ""))
+		sprintf(content, "%scontactinfo: %s\n", content, contactinfo);
+	if (comments && strcmp(comments, ""))
+		sprintf(content, "%scomments: %s\n", content, comments);
+	if (signature && strcmp(signature, ""))
+		sprintf(content, "%ssignature: %s\n", content, signature);
+	if (gecos && strcmp(gecos, ""))
+		sprintf(content, "%sgecos: %s\n", content, gecos);
+	sprintf(content, "%sprivileged: %d\ndisabled: %d\n", content, privileged
+			, disabled);
 
 	struct curl_httppost *post, *last = NULL;
 	curl_formadd(&post, &last
