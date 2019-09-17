@@ -2,7 +2,7 @@
 #include "rtclient/request.h"
 #include "rtclient/user.h"
 
-typedef struct rt_user rt_user;
+typedef struct rtclient_user rtclient_user;
 
 static size_t show_callback(void *contents, size_t size, size_t nmemb
 		, void *writedata)
@@ -12,8 +12,8 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 	memcpy(response, contents, realsize);
 	response[realsize] = '\0';
 
-	rt_user **userptr = (rt_user **)writedata;
-	rt_user *user = *userptr;
+	rtclient_user **userptr = (rtclient_user **)writedata;
+	rtclient_user *user = *userptr;
 	user->id = NULL;
 	user->name = NULL;
 	user->password = NULL;
@@ -35,8 +35,8 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 	user->comments = NULL;
 	user->signature = NULL;
 	user->gecos = NULL;
-	user->lang = RT_LANG_NONE;
-	user->timezone = RT_TIMEZONE_NONE;
+	user->lang = RTCLIENT_LANG_NONE;
+	user->timezone = RTCLIENT_TIMEZONE_NONE;
 	user->privileged = false;
 	user->disabled = true;
 
@@ -150,9 +150,9 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 	return realsize;
 }
 
-void rtclient_user_show(rt_user **userptr, const char *name)
+void rtclient_user_show(rtclient_user **userptr, const char *name)
 {
-	*userptr = malloc(sizeof(rt_user));
+	*userptr = malloc(sizeof(rtclient_user));
 	request("/REST/1.0/user/", name, show_callback, (void *)userptr, NULL);
 }
 
@@ -176,8 +176,8 @@ void rtclient_user_new(const char *name
 		, const char *comments
 		, const char *signature
 		, const char *gecos
-		, enum rt_lang lang
-		, enum rt_timezone timezone
+		, enum rtclient_lang lang
+		, enum rtclient_timezone timezone
 		, bool disabled
 		, bool privileged)
 {
@@ -279,7 +279,7 @@ void rtclient_user_new(const char *name
 	post = NULL;
 }
 
-void rtclient_user_free(rt_user *user)
+void rtclient_user_free(rtclient_user *user)
 {
 	if (user->id)
 		free(user->id);

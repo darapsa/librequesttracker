@@ -1,5 +1,5 @@
-#ifndef RTCLIENT_H
-#define RTCLIENT_H
+#ifndef RTCLIENT_CLIENT_H
+#define RTCLIENT_CLIENT_H
 
 #include "user.h"
 #include "ticket.h"
@@ -16,4 +16,4 @@ extern "C" {
 }
 #endif
 
-#endif // RTCLIENT_H
+#endif // RTCLIENT_CLIENT_H
