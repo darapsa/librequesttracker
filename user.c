@@ -245,7 +245,6 @@ void rtclient_user_new(const char *name
 		sprintf(content, "%sGecos: %s\n", content, gecos);
 	sprintf(content, "%sPrivileged: %d\nDisabled: %d\n", content, privileged
 			, disabled);
-	fprintf(stderr, "Content:\n%s", content);
 
 	struct curl_httppost *post, *last = NULL;
 	curl_formadd(&post, &last
