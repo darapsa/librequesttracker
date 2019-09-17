@@ -161,89 +161,91 @@ void rtclient_user_new(const char *name
 {
 	size_t length = 0;
 	if (name && strcmp(name, ""))
-		length += strlen("name: \n") + strlen(name);
+		length += strlen("Name: \n") + strlen(name);
 	if (password && strcmp(password, ""))
-		length += strlen("password: \n") + strlen(password);
+		length += strlen("Password: \n") + strlen(password);
 	if (emailaddress && strcmp(emailaddress, ""))
-		length += strlen("emailaddress: \n") + strlen(emailaddress);
+		length += strlen("EmailAddress: \n") + strlen(emailaddress);
 	if (realname && strcmp(realname, ""))
-		length += strlen("realname: \n") + strlen(realname);
+		length += strlen("RealName: \n") + strlen(realname);
 	if (nickname && strcmp(nickname, ""))
-		length += strlen("nickname: \n") + strlen(nickname);
+		length += strlen("NickName: \n") + strlen(nickname);
 	if (organization && strcmp(organization, ""))
-		length += strlen("organization: \n") + strlen(organization);
+		length += strlen("Organization: \n") + strlen(organization);
 	if (address1 && strcmp(address1, ""))
-		length += strlen("address1: \n") + strlen(address1);
+		length += strlen("Address1: \n") + strlen(address1);
 	if (address2 && strcmp(address2, ""))
-		length += strlen("address1: \n") + strlen(address2);
+		length += strlen("Address1: \n") + strlen(address2);
 	if (city && strcmp(city, ""))
-		length += strlen("city: \n") + strlen(city);
+		length += strlen("City: \n") + strlen(city);
 	if (state && strcmp(state, ""))
-		length += strlen("state: \n") + strlen(state);
+		length += strlen("State: \n") + strlen(state);
 	if (zip && strcmp(zip, ""))
-		length += strlen("zip: \n") + strlen(zip);
+		length += strlen("Zip: \n") + strlen(zip);
 	if (country && strcmp(country, ""))
-		length += strlen("country: \n") + strlen(country);
+		length += strlen("Country: \n") + strlen(country);
 	if (homephone && strcmp(homephone, ""))
-		length += strlen("homephone: \n") + strlen(homephone);
+		length += strlen("HomePhone: \n") + strlen(homephone);
 	if (workphone && strcmp(workphone, ""))
-		length += strlen("workphone: \n") + strlen(workphone);
+		length += strlen("WorkPhone: \n") + strlen(workphone);
 	if (mobilephone && strcmp(mobilephone, ""))
-		length += strlen("mobilephone: \n") + strlen(mobilephone);
+		length += strlen("MobilePhone: \n") + strlen(mobilephone);
 	if (pagerphone && strcmp(pagerphone, ""))
-		length += strlen("pagerphone: \n") + strlen(pagerphone);
+		length += strlen("PagerPhone: \n") + strlen(pagerphone);
 	if (contactinfo && strcmp(contactinfo, ""))
-		length += strlen("contactinfo: \n") + strlen(contactinfo);
+		length += strlen("ContactInfo: \n") + strlen(contactinfo);
 	if (comments && strcmp(comments, ""))
-		length += strlen("comments: \n") + strlen(comments);
+		length += strlen("Comments: \n") + strlen(comments);
 	if (signature && strcmp(signature, ""))
-		length += strlen("signature: \n") + strlen(signature);
+		length += strlen("Signature: \n") + strlen(signature);
 	if (gecos && strcmp(gecos, ""))
-		length += strlen("gecos: \n") + strlen(gecos);
+		length += strlen("Gecos: \n") + strlen(gecos);
 
-	char content[length + strlen("privileged: \ndisabled: \n") + 3];
+	char content[length + strlen("Privileged: \nDisabled: \n") + 3];
+	memset(content, 0, strlen(content));
 	if (name && strcmp(name, ""))
-		sprintf(content, "%sname: %s\n", content, name);
+		sprintf(content, "%sName: %s\n", content, name);
 	if (password && strcmp(password, ""))
-		sprintf(content, "%spassword: %s\n", content, password);
+		sprintf(content, "%sPassword: %s\n", content, password);
 	if (emailaddress && strcmp(emailaddress, ""))
-		sprintf(content, "%semailaddress: %s\n", content, emailaddress);
+		sprintf(content, "%sEmailAddress: %s\n", content, emailaddress);
 	if (realname && strcmp(realname, ""))
-		sprintf(content, "%srealname: %s\n", content, realname);
+		sprintf(content, "%sRealName: %s\n", content, realname);
 	if (nickname && strcmp(nickname, ""))
-		sprintf(content, "%snickname: %s\n", content, nickname);
+		sprintf(content, "%sNickName: %s\n", content, nickname);
 	if (organization && strcmp(organization, ""))
-		sprintf(content, "%sorganization: %s\n", content, organization);
+		sprintf(content, "%sOrganization: %s\n", content, organization);
 	if (address1 && strcmp(address1, ""))
-		sprintf(content, "%saddress1: %s\n", content, address1);
+		sprintf(content, "%sAddress1: %s\n", content, address1);
 	if (address2 && strcmp(address2, ""))
-		sprintf(content, "%saddress2: %s\n", content, address2);
+		sprintf(content, "%sAddress2: %s\n", content, address2);
 	if (city && strcmp(city, ""))
-		sprintf(content, "%scity: %s\n", content, city);
+		sprintf(content, "%sCity: %s\n", content, city);
 	if (state && strcmp(state, ""))
-		sprintf(content, "%sstate: %s\n", content, state);
+		sprintf(content, "%sState: %s\n", content, state);
 	if (zip && strcmp(zip, ""))
-		sprintf(content, "%szip: %s\n", content, zip);
+		sprintf(content, "%sZip: %s\n", content, zip);
 	if (country && strcmp(country, ""))
-		sprintf(content, "%scountry: %s\n", content, country);
+		sprintf(content, "%sCountry: %s\n", content, country);
 	if (homephone && strcmp(homephone, ""))
-		sprintf(content, "%shomephone: %s\n", content, homephone);
+		sprintf(content, "%sHomePhone: %s\n", content, homephone);
 	if (workphone && strcmp(workphone, ""))
-		sprintf(content, "%sworkphone: %s\n", content, workphone);
+		sprintf(content, "%sWorkPhone: %s\n", content, workphone);
 	if (mobilephone && strcmp(mobilephone, ""))
-		sprintf(content, "%smobilephone: %s\n", content, mobilephone);
+		sprintf(content, "%sMobilePhone: %s\n", content, mobilephone);
 	if (pagerphone && strcmp(pagerphone, ""))
-		sprintf(content, "%spagerphone: %s\n", content, pagerphone);
+		sprintf(content, "%sPagerPhone: %s\n", content, pagerphone);
 	if (contactinfo && strcmp(contactinfo, ""))
-		sprintf(content, "%scontactinfo: %s\n", content, contactinfo);
+		sprintf(content, "%sContactInfo: %s\n", content, contactinfo);
 	if (comments && strcmp(comments, ""))
-		sprintf(content, "%scomments: %s\n", content, comments);
+		sprintf(content, "%sComments: %s\n", content, comments);
 	if (signature && strcmp(signature, ""))
-		sprintf(content, "%ssignature: %s\n", content, signature);
+		sprintf(content, "%sSignature: %s\n", content, signature);
 	if (gecos && strcmp(gecos, ""))
-		sprintf(content, "%sgecos: %s\n", content, gecos);
-	sprintf(content, "%sprivileged: %d\ndisabled: %d\n", content, privileged
+		sprintf(content, "%sGecos: %s\n", content, gecos);
+	sprintf(content, "%sPrivileged: %d\nDisabled: %d\n", content, privileged
 			, disabled);
+	fprintf(stderr, "Content:\n%s", content);
 
 	struct curl_httppost *post, *last = NULL;
 	curl_formadd(&post, &last
@@ -251,7 +253,7 @@ void rtclient_user_new(const char *name
 			, CURLFORM_PTRCONTENTS, content
 			, CURLFORM_END);
 	last = NULL;
-	request("", "", NULL, NULL, post);
+	request("/REST/1.0/user/new", "", NULL, NULL, post);
 	curl_formfree(post);
 	post = NULL;
 }
