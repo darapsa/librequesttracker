@@ -134,16 +134,30 @@ void rtclient_user_show(rt_user **userptr, const char *name)
 	request("/REST/1.0/user/", name, show_callback, (void *)userptr, NULL);
 }
 
-void rtclient_user_new(const char *name, const char *emailaddress
-		, const char *realname, const char *nickname, const char *gecos
-		, enum rt_lang lang, enum rt_timezone timezone
-		, const char *contactinfo, bool enabled, bool privileged
-		, const char *password, const char *comments, const char *signature
-		, const char *organization, const char *address1
-		, const char *address2, const char *city, const char *state
-		, const char *zip, const char *country, const char *homephone
-		, const char *workphone, const char *mobilephone
-		, const char *pagerphone)
+void rtclient_user_new(const char *name
+		, const char *password
+		, const char *emailaddress
+		, const char *realname
+		, const char *nickname
+		, const char *organization
+		, const char *address1
+		, const char *address2
+		, const char *city
+		, const char *state
+		, const char *zip
+		, const char *country
+		, const char *homephone
+		, const char *workphone
+		, const char *mobilephone
+		, const char *pagerphone
+		, const char *contactinfo
+		, const char *comments
+		, const char *signature
+		, const char *gecos
+		, enum rt_lang lang
+		, enum rt_timezone timezone
+		, bool disabled
+		, bool privileged)
 {
 	size_t length = 0;
 	if (name && strcmp(name, ""))

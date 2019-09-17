@@ -443,18 +443,10 @@ extern "C" {
 
 	void rtclient_user_show(struct rt_user **userptr, const char *name);
 	void rtclient_user_new(const char *name
+			, const char *password
 			, const char *emailaddress
 			, const char *realname
 			, const char *nickname
-			, const char *gecos
-			, enum rt_lang lang
-			, enum rt_timezone timezone
-			, const char *contactinfo
-			, bool enabled
-			, bool privileged
-			, const char *password
-			, const char *comments
-			, const char *signature
 			, const char *organization
 			, const char *address1
 			, const char *address2
@@ -465,7 +457,15 @@ extern "C" {
 			, const char *homephone
 			, const char *workphone
 			, const char *mobilephone
-			, const char *pagerphone);
+			, const char *pagerphone
+			, const char *contactinfo
+			, const char *comments
+			, const char *signature
+			, const char *gecos
+			, enum rt_lang lang
+			, enum rt_timezone timezone
+			, bool disabled
+			, bool privileged);
 	void rtclient_user_free(struct rt_user *user);
 
 #ifdef __cplusplus
