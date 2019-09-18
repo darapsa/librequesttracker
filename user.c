@@ -45,7 +45,7 @@ void rtclient_user_new(const char *name
 	if (address1 && strcmp(address1, ""))
 		length += strlen("Address1: \n") + strlen(address1);
 	if (address2 && strcmp(address2, ""))
-		length += strlen("Address1: \n") + strlen(address2);
+		length += strlen("Address2: \n") + strlen(address2);
 	if (city && strcmp(city, ""))
 		length += strlen("City: \n") + strlen(city);
 	if (state && strcmp(state, ""))
