@@ -86,7 +86,7 @@ void rtclient_ticket_new(const char *queue
 			, CURLFORM_PTRCONTENTS, content
 			, CURLFORM_END);
 	last = NULL;
-	request("/REST/1.0/user/new", "", NULL, NULL, post);
+	request("/REST/1.0/ticket/new", "", NULL, NULL, post);
 	curl_formfree(post);
 	post = NULL;
 }
