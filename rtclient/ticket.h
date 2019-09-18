@@ -10,6 +10,20 @@ struct rtclient_ticketlist {
 extern "C" {
 #endif
 
+	void rtclient_ticket_new(const char *queue
+			, const char *requestor
+			, const char *subject
+			, const char *cc
+			, const char *admincc
+			, const char *owner
+			, const char *status
+			, const char *priority
+			, const char *initialpriority
+			, const char *finalpriority
+			, const char *timeestimated
+			, const char *starts
+			, const char *due
+			, const char *text);
 	void rtclient_ticket_search(struct rtclient_ticketlist **listptr
 			, const char *query);
 	void rtclient_ticket_freelist(struct rtclient_ticketlist *list);
