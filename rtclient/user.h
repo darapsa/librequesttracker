@@ -442,7 +442,6 @@ struct rtclient_user {
 extern "C" {
 #endif
 
-	void rtclient_user_show(struct rtclient_user **userptr, const char *name);
 	void rtclient_user_new(const char *name
 			, const char *password
 			, const char *emailaddress
@@ -467,6 +466,7 @@ extern "C" {
 			, enum rtclient_timezone timezone
 			, bool disabled
 			, bool privileged);
+	void rtclient_user_show(struct rtclient_user **userptr, const char *name);
 	void rtclient_user_free(struct rtclient_user *user);
 
 #ifdef __cplusplus
