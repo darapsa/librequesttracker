@@ -21,6 +21,11 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 		line = strtok(NULL, "\n");
 		do {
 			(*listptr)->length++;
+			if (!strcmp(line, "No matching results.")) {
+				free(*listptr);
+				*listptr = NULL;
+				return realsize;
+			}
 		} while ((line = strtok(NULL, "\n")));
 		rtclient_ticketlist *ptr = realloc(*listptr, sizeof(*listptr)
 				+ (*listptr)->length * sizeof(char *));
