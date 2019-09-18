@@ -19,7 +19,7 @@ void rtclient_ticket_new(const char *queue
 			, const char *due
 			, const char *text)
 {
-	size_t length = 0;
+	size_t length = strlen("id: ticket/new\n");
 	if (queue && strcmp(queue, ""))
 		length += strlen("Queue: \n") + strlen(queue);
 	if (requestor && strcmp(requestor, ""))
@@ -50,7 +50,7 @@ void rtclient_ticket_new(const char *queue
 		length += strlen("Text: \n") + strlen(text);
 
 	char content[length + 1];
-	memset(content, 0, strlen(content));
+	strcpy(content, "id: ticket/new\n");
 	if (queue && strcmp(queue, ""))
 		sprintf(content, "%sQueue: %s\n", content, queue);
 	if (requestor && strcmp(requestor, ""))
