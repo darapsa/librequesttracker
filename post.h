@@ -17,6 +17,14 @@ inline void post(const char *path, const char *pairs[], size_t n)
 			sprintf(content, "%s%s: %s\n", content, pairs[i + 1]
 					, pair);
 	}
+#ifdef DEBUG
+#ifdef ANDROID
+	__android_log_print(ANDROID_LOG_DEBUG, "librtclient", "%s\nContent:\n%s"
+			, __func__, content);
+#else
+		fprintf(stderr, "%s\nContent:\n%s", __func__, content);
+#endif // ANDROID
+#endif // DEBUG
 
 	struct curl_httppost *post, *last = NULL;
 	curl_formadd(&post, &last
