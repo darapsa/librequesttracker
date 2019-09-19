@@ -1,14 +1,11 @@
 #ifndef RTCLIENT_REQUEST_H
 #define RTCLIENT_REQUEST_H
 
-#ifdef DEBUG
-#ifdef ANDROID
+#if defined(DEBUG) && defined(ANDROID)
 #include <android/log.h>
-#else
-#include <stdio.h>
-#endif // ANDROID
-#endif // DEBUG
+#endif
 #include <string.h>
+#include <stdio.h>
 #include <curl/curl.h>
 
 extern CURL *curl;

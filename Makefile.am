@@ -5,6 +5,8 @@ librtclient_a_SOURCES = \
 			rtclient/client.h \
 			request.h \
 			request.c \
+			post.h \
+			post.c \
 			user.c \
 			ticket.c \
 			client.c
