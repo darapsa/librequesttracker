@@ -6,7 +6,7 @@ inline void post(const char *path, const char *pairs[], size_t n)
 	for (size_t i = 0; i < n; i += 2) {
 		const char *pair = pairs[i];
 		if (pair && strcmp(pair, ""))
-			length += strlen(pair) + strlen(++pair) + 3;
+			length += strlen(pair) + strlen(pairs[i + 1]) + 3;
 	}
 
 	char content[length + 1];
@@ -22,7 +22,7 @@ inline void post(const char *path, const char *pairs[], size_t n)
 	__android_log_print(ANDROID_LOG_DEBUG, "librtclient", "%s\nContent:\n%s"
 			, __func__, content);
 #else
-		fprintf(stderr, "%s\nContent:\n%s", __func__, content);
+	fprintf(stderr, "%s\nContent:\n%s", __func__, content);
 #endif // ANDROID
 #endif // DEBUG
 
