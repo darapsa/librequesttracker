@@ -1,3 +1,6 @@
+#ifndef RTCLIENT_POST_H
+#define RTCLIENT_POST_H
+
 #include "request.h"
 
 inline void post(const char *path, const char *pairs[], size_t n)
@@ -36,3 +39,5 @@ inline void post(const char *path, const char *pairs[], size_t n)
 	curl_formfree(post);
 	post = NULL;
 }
+
+#endif // RTCLIENT_POST_H
