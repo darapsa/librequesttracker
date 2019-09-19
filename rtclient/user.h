@@ -466,7 +466,8 @@ extern "C" {
 			, enum rtclient_timezone timezone
 			, bool disabled
 			, bool privileged);
-	void rtclient_user_show(struct rtclient_user **userptr, const char *name);
+	void rtclient_user_showid(struct rtclient_user **userptr, unsigned int id);
+	void rtclient_user_showname(struct rtclient_user **userptr, const char *name);
 	void rtclient_user_free(struct rtclient_user *user);
 
 #ifdef __cplusplus

@@ -174,7 +174,11 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 	return realsize;
 }
 
-void rtclient_user_show(rtclient_user **userptr, const char *name)
+void rtclient_user_showid(rtclient_user **userptr, unsigned int id)
+{
+}
+
+void rtclient_user_showname(rtclient_user **userptr, const char *name)
 {
 	*userptr = malloc(sizeof(rtclient_user));
 	rtclient_user *user = *userptr;

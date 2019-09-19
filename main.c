@@ -29,7 +29,7 @@ int main(void)
 	free(pass);
 
 	struct rtclient_user *user = NULL;
-	rtclient_user_show(&user, name);
+	rtclient_user_showname(&user, name);
 
 	if (user) {
 		printf("id: %s\nname: %s\npassword: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\ngecos: %s\nlang: %d\ntimezone: %d\nprivileged: %d\ndisabled: %d\n"
