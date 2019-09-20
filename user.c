@@ -174,11 +174,7 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 	return realsize;
 }
 
-void rtclient_user_showid(rtclient_user **userptr, unsigned int id)
-{
-}
-
-void rtclient_user_showname(rtclient_user **userptr, const char *name)
+static inline void user_init(rtclient_user **userptr)
 {
 	*userptr = malloc(sizeof(rtclient_user));
 	rtclient_user *user = *userptr;
@@ -207,6 +203,18 @@ void rtclient_user_showname(rtclient_user **userptr, const char *name)
 	user->timezone = RTCLIENT_TIMEZONE_NONE;
 	user->privileged = false;
 	user->disabled = true;
+}
+
+void rtclient_user_showid(rtclient_user **userptr, unsigned int id)
+{
+	user_init(userptr);
+	request(show_callback, (void *)userptr, NULL, "%s%d", "/REST/1.0/user/"
+			, id);
+}
+
+void rtclient_user_showname(rtclient_user **userptr, const char *name)
+{
+	user_init(userptr);
 	request(show_callback, (void *)userptr, NULL, "%s%s", "/REST/1.0/user/"
 			, name);
 }
