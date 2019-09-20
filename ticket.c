@@ -94,8 +94,7 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 void rtclient_ticket_search(rtclient_ticketlist **listptr, const char *query)
 {
 	*listptr = malloc(sizeof(rtclient_ticketlist));
-	rtclient_ticketlist *list = *listptr;
-	list->length = 0;
+	(*listptr)->length = 0;
 	request(search_callback, (void *)listptr, NULL, "%s%s"
 			, "/REST/1.0/search/ticket?query=", query);
 }
