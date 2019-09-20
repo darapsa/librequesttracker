@@ -1,22 +1,75 @@
 #ifndef RTCLIENT_REQUEST_H
 #define RTCLIENT_REQUEST_H
 
-#if defined(DEBUG) && defined(ANDROID)
+#if defined(ANDROID) && defined(DEBUG)
 #include <android/log.h>
 #endif
 #include <string.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <curl/curl.h>
 
 extern CURL *curl;
 extern char *server_url;
 
-inline void request(const char *path, const char *suffix
-		, size_t (*writefunction)(void *, size_t, size_t, void *)
-		, void *writedata, struct curl_httppost *post)
+inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
+		, void *writedata, struct curl_httppost *post, char *fmt, ...)
 {
-	char url[strlen(server_url) + strlen(path) + strlen(suffix) + 1];
-	sprintf(url, "%s%s%s", server_url, path, suffix);
+	va_list ap;
+	char *p, *sval;
+	unsigned int ival;
+	size_t length = strlen(server_url) + strlen(fmt);
+
+	va_start(ap, fmt);
+	for (p = fmt; *p; p++) {
+		if (*p != '%')
+			continue;
+		switch(*++p) {
+			case 's':
+				sval = va_arg(ap, char *);
+				length += strlen(sval) - 2;
+				break;
+			case 'd':
+				ival = va_arg(ap, unsigned int);
+				do {
+					length++;
+				} while (ival / 10);
+				length -= 2;
+				break;
+			default:
+				break;
+		}
+	}
+	va_end(ap);
+
+	char url[length + 1];
+	strcpy(url, server_url);
+
+	va_start(ap, fmt);
+	for (p = fmt; *p; p++) {
+		if (*p != '%')
+			continue;
+		switch(*++p) {
+			case 's':
+				sval = va_arg(ap, char *);
+#ifdef DEBUG
+				printf("String: %s\n", sval);
+#endif
+				strcat(url, sval);
+				break;
+			case 'd':
+				ival = va_arg(ap, unsigned int);
+#ifdef DEBUG
+				printf("Integer: %d\n", ival);
+#endif
+				sprintf(url, "%s%d", url, ival);
+				break;
+			default:
+				break;
+		}
+	}
+	va_end(ap);
+
 	curl_easy_setopt(curl, CURLOPT_URL, url);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writefunction);
 	if (writedata)
@@ -44,4 +97,5 @@ inline void request(const char *path, const char *suffix
 	}
 #endif // DEBUG
 }
+
 #endif // RTCLIENT_REQUEST_H

@@ -35,7 +35,7 @@ void rtclient_login(const char *name, const char *password)
 			, CURLFORM_PTRCONTENTS, password
 			, CURLFORM_END);
 	last = NULL;
-	request("", "", NULL, NULL, post);
+	request(NULL, NULL, post, "");
 	curl_formfree(post);
 	post = NULL;
 }

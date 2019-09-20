@@ -207,7 +207,8 @@ void rtclient_user_showname(rtclient_user **userptr, const char *name)
 	user->timezone = RTCLIENT_TIMEZONE_NONE;
 	user->privileged = false;
 	user->disabled = true;
-	request("/REST/1.0/user/", name, show_callback, (void *)userptr, NULL);
+	request(show_callback, (void *)userptr, NULL, "%s%s", "/REST/1.0/user/"
+			, name);
 }
 
 void rtclient_user_free(rtclient_user *user)

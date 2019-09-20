@@ -35,7 +35,7 @@ inline void post(const char *path, const char *pairs[], size_t n)
 			, CURLFORM_PTRCONTENTS, content
 			, CURLFORM_END);
 	last = NULL;
-	request(path, "", NULL, NULL, post);
+	request(NULL, NULL, post, "%s", path);
 	curl_formfree(post);
 	post = NULL;
 }
