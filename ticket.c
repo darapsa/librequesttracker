@@ -80,8 +80,13 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 		free(*listptr);
 		*listptr = NULL;
 #ifdef DEBUG
-		fprintf(stderr, "%s response status: %s\n", __func__, line);
-#endif
+#ifdef ANDROID
+		__android_log_print(ANDROID_LOG_INFO, "librtclient"
+				, "%s response status:\n%s", __func__, error);
+#else
+		printf("%s response status:\n%s\n", __func__, line);
+#endif // ANDROID
+#endif // DEBUG
 	}
 
 	return realsize;
