@@ -52,16 +52,10 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 		switch(*++p) {
 			case 's':
 				sval = va_arg(ap, char *);
-#ifdef DEBUG
-				printf("String: %s\n", sval);
-#endif
 				strcat(url, sval);
 				break;
 			case 'd':
 				ival = va_arg(ap, unsigned int);
-#ifdef DEBUG
-				printf("Integer: %d\n", ival);
-#endif
 				sprintf(url, "%s%d", url, ival);
 				break;
 			default:
