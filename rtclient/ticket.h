@@ -2,7 +2,7 @@
 #define RTCLIENT_TICKET_H
 
 struct rtclient_ticketlist {
-	unsigned int length;
+	size_t length;
 	char *tickets[];
 };
 

@@ -1,8 +1,6 @@
 #ifndef RTCLIENT_USER_H
 #define RTCLIENT_USER_H
 
-#include <stdbool.h>
-
 enum rtclient_lang {
 	RTCLIENT_LANG_NONE = 0
 		, RTCLIENT_LANG_ar

@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdbool.h>
 #include "request.h"
 #include "rtclient/client.h"
 

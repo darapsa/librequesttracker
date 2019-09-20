@@ -1,9 +1,6 @@
 #ifndef RTCLIENT_CLIENT_H
 #define RTCLIENT_CLIENT_H
 
-#include "user.h"
-#include "ticket.h"
-
 #ifdef __cplusplus
 extern "C" {
 #endif

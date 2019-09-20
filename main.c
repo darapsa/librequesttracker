@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <rtclient/client.h>
+#include <rtclient/user.h>
+#include <rtclient/ticket.h>
 
 int main(void)
 {
@@ -66,7 +69,7 @@ int main(void)
 		sprintf(query, "%s%s'", prefix, name);
 		rtclient_ticket_search(&list, query);
 		if (list) {
-			for (unsigned short i = 0; i < list->length; i++) {
+			for (size_t i = 0; i < list->length; i++) {
 				char *ticket = list->tickets[i];
 				printf("Ticket %d: %s\n", i, ticket);
 			}
