@@ -409,7 +409,7 @@ enum rtclient_timezone {
 };
 
 struct rtclient_user {
-	char *id;
+	unsigned int id;
 	char *name;
 	char *password;
 	char *emailaddress;

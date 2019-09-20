@@ -74,8 +74,8 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 			token = strtok_r(line, ":", &tokensaveptr);
 			if (!strcmp(token, "id")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->id = malloc(strlen(token));
-				strcpy(user->id, ++token);
+				token += 6;
+				user->id = atoi(token);
 			} else if (!strcmp(token, "Password")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->password = malloc(strlen(token));
@@ -184,7 +184,7 @@ static inline void user_init(rtclient_user **userptr)
 {
 	*userptr = malloc(sizeof(rtclient_user));
 	rtclient_user *user = *userptr;
-	user->id = NULL;
+	user->id = 0;
 	user->name = NULL;
 	user->password = NULL;
 	user->emailaddress = NULL;
@@ -227,8 +227,6 @@ void rtclient_user_showname(rtclient_user **userptr, const char *name)
 
 void rtclient_user_free(rtclient_user *user)
 {
-	if (user->id)
-		free(user->id);
 	if (user->name)
 		free(user->name);
 	if (user->password)
