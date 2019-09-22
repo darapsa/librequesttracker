@@ -30,7 +30,7 @@ void rtclient_user_new(const char *name
 		, bool disabled
 		, bool privileged)
 {
-	post("/REST/1.0/user/new", (const char *[]){
+	post("REST/1.0/user/new", (const char *[]){
 			name, "Name"
 			, password, "Password"
 			, emailaddress, "EmailAddress"
@@ -214,14 +214,14 @@ static inline void user_init(rtclient_user **userptr)
 void rtclient_user_showid(rtclient_user **userptr, unsigned int id)
 {
 	user_init(userptr);
-	request(show_callback, (void *)userptr, NULL, "%s%d", "/REST/1.0/user/"
+	request(show_callback, (void *)userptr, NULL, "%s%d", "REST/1.0/user/"
 			, id);
 }
 
 void rtclient_user_showname(rtclient_user **userptr, const char *name)
 {
 	user_init(userptr);
-	request(show_callback, (void *)userptr, NULL, "%s%s", "/REST/1.0/user/"
+	request(show_callback, (void *)userptr, NULL, "%s%s", "REST/1.0/user/"
 			, name);
 }
 

@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include "request.h"
 #include "rtclient/client.h"
 
@@ -17,8 +17,12 @@ bool rtclient_init(const char *url)
 #ifdef DEBUG
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 #endif
-		server_url = malloc(strlen(url) + 1);
+		size_t length = strlen(url);
+		bool append = !(bool)(url[length - 1] == '/');
+		server_url = malloc(length + (size_t)append + 1);
 		strcpy(server_url, url);
+		if (append)
+			strcat(server_url, "/");
 	}
 
 	return (bool)curl;

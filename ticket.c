@@ -19,7 +19,7 @@ void rtclient_ticket_new(const char *queue
 			, const char *due
 			, const char *text)
 {
-	post("/REST/1.0/ticket/new", (const char *[]){
+	post("REST/1.0/ticket/new", (const char *[]){
 			"ticket/new", "id"
 			, queue, "Queue"
 			, requestor, "Requestor"
@@ -96,7 +96,7 @@ void rtclient_ticket_search(rtclient_ticketlist **listptr, const char *query)
 	*listptr = malloc(sizeof(rtclient_ticketlist));
 	(*listptr)->length = 0;
 	request(search_callback, (void *)listptr, NULL, "%s%s"
-			, "/REST/1.0/search/ticket?query=", query);
+			, "REST/1.0/search/ticket?query=", query);
 }
 
 void rtclient_ticket_freelist(rtclient_ticketlist *list)
