@@ -170,7 +170,7 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 #ifdef DEBUG
 #ifdef ANDROID
 		__android_log_print(ANDROID_LOG_INFO, "librtclient"
-				, "%s response status:\n%s", __func__, error);
+				, "%s response status:\n%s", __func__, line);
 #else
 		printf("%s response status:\n%s\n", __func__, line);
 #endif // ANDROID
