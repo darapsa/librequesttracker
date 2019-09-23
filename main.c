@@ -35,7 +35,7 @@ int main(void)
 	rtclient_user_showname(&user, name);
 
 	if (user) {
-		printf("id: %s\nname: %s\npassword: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\ngecos: %s\nlang: %d\ntimezone: %d\nprivileged: %d\ndisabled: %d\n"
+		printf("id: %d\nname: %s\npassword: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\ngecos: %s\nlang: %d\ntimezone: %d\nprivileged: %d\ndisabled: %d\n"
 				, user->id
 				, user->name
 				, user->password
