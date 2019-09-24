@@ -71,7 +71,7 @@ int main(void)
 		if (list) {
 			for (size_t i = 0; i < list->length; i++) {
 				char *ticket = list->tickets[i];
-				printf("Ticket %d: %s\n", i, ticket);
+				printf("Ticket %ld: %s\n", i, ticket);
 			}
 			rtclient_ticket_freelist(list);
 		}
