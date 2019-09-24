@@ -6,7 +6,7 @@
 CURL *curl = NULL;
 char *server_url = NULL;
 
-bool rtclient_init(const char *url)
+bool rtclient_init(const char *url, const char *certificate)
 {
 	curl_global_init(CURL_GLOBAL_SSL);
 	curl = curl_easy_init();
@@ -14,6 +14,8 @@ bool rtclient_init(const char *url)
 		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 		curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
 		curl_easy_setopt(curl, CURLOPT_REFERER, url);
+		if (certificate)
+			curl_easy_setopt(curl, CURLOPT_CAINFO, certificate);
 #ifdef DEBUG
 		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
 #endif

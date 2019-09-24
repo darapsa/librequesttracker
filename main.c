@@ -25,7 +25,7 @@ int main(void)
 	strncpy(pass, pass_line, pass_nread);
 	free(pass_line);
 
-	rtclient_init(url);
+	rtclient_init(url, NULL);
 	free(url);
 
 	rtclient_login(name, pass);
