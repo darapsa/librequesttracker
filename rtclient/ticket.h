@@ -31,6 +31,7 @@ extern "C" {
 			, const char *text);
 	void rtclient_ticket_search(struct rtclient_ticketlist **listptr
 			, const char *query);
+	void rtclient_ticket_history(unsigned int id);
 	void rtclient_ticket_freelist(struct rtclient_ticketlist *list);
 
 #ifdef __cplusplus
