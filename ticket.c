@@ -69,7 +69,7 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 		line = strtok_r(lines, "\n", &linesaveptr);
 		line = strtok_r(NULL, "\n", &linesaveptr);
 		char *tokensaveptr = NULL, *token = NULL;
-		for (unsigned int i = 0; i < list->length; i++) {
+		for (size_t i = 0; i < list->length; i++) {
 			list->tickets[i] = malloc(sizeof(rtclient_ticket));
 			rtclient_ticket *ticket = list->tickets[i]; 
 			token = strtok_r(line, ":", &tokensaveptr);
@@ -105,7 +105,7 @@ void rtclient_ticket_search(rtclient_ticketlist **listptr, const char *query)
 
 void rtclient_ticket_freelist(rtclient_ticketlist *list)
 {
-	for (unsigned short i = 0; i < list->length; i++) {
+	for (size_t i = 0; i < list->length; i++) {
 		rtclient_ticket *ticket = list->tickets[i];
 		free(ticket->subject);
 		free(ticket);
