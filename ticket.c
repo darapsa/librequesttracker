@@ -2,6 +2,7 @@
 #include "post.h"
 #include "rtclient/ticket.h"
 
+typedef struct rtclient_ticket rtclient_ticket;
 typedef struct rtclient_ticketlist rtclient_ticketlist;
 
 void rtclient_ticket_new(const char *queue
@@ -69,10 +70,13 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 		line = strtok_r(NULL, "\n", &linesaveptr);
 		char *tokensaveptr = NULL, *token = NULL;
 		for (unsigned int i = 0; i < list->length; i++) {
+			list->tickets[i] = malloc(sizeof(rtclient_ticket));
+			rtclient_ticket *ticket = list->tickets[i]; 
 			token = strtok_r(line, ":", &tokensaveptr);
+			ticket->id = atoi(token);
 			token = strtok_r(NULL, ":", &tokensaveptr);
-			list->tickets[i] = malloc(strlen(token));
-			strcpy(list->tickets[i], ++token);
+			ticket->subject = malloc(strlen(token));
+			strcpy(ticket->subject, ++token);
 			line = strtok_r(NULL, "\n", &linesaveptr);
 		}
 	} else {
@@ -101,8 +105,11 @@ void rtclient_ticket_search(rtclient_ticketlist **listptr, const char *query)
 
 void rtclient_ticket_freelist(rtclient_ticketlist *list)
 {
-	for (unsigned short i = 0; i < list->length; i++)
-		free(list->tickets[i]);
+	for (unsigned short i = 0; i < list->length; i++) {
+		rtclient_ticket *ticket = list->tickets[i];
+		free(ticket->subject);
+		free(ticket);
+	}
 	free(list);
 	list = NULL;
 }

@@ -70,8 +70,8 @@ int main(void)
 		rtclient_ticket_search(&list, query);
 		if (list) {
 			for (size_t i = 0; i < list->length; i++) {
-				char *ticket = list->tickets[i];
-				printf("Ticket %zu: %s\n", i, ticket);
+				struct rtclient_ticket *ticket = list->tickets[i];
+				printf("%d: %s\n", ticket->id, ticket->subject);
 			}
 			rtclient_ticket_freelist(list);
 		}

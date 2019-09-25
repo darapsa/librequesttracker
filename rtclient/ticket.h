@@ -1,9 +1,14 @@
 #ifndef RTCLIENT_TICKET_H
 #define RTCLIENT_TICKET_H
 
+struct rtclient_ticket {
+	unsigned int id;
+	char *subject;
+};
+
 struct rtclient_ticketlist {
 	size_t length;
-	char *tickets[];
+	struct rtclient_ticket *tickets[];
 };
 
 #ifdef __cplusplus
