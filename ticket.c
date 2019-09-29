@@ -61,10 +61,12 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 				return realsize;
 			}
 		} while ((line = strtok(NULL, "\n")));
+
 		rtclient_ticketlist *ptr = realloc(*listptr, sizeof(*listptr)
-				+ (*listptr)->length * sizeof(char *));
+				+ (*listptr)->length * sizeof(rtclient_ticket));
 		*listptr = ptr;
 		rtclient_ticketlist *list = *listptr;
+
 		char *linesaveptr = NULL;
 		line = strtok_r(lines, "\n", &linesaveptr);
 		line = strtok_r(NULL, "\n", &linesaveptr);
