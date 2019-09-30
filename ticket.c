@@ -181,14 +181,12 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 #endif
 				} else if (!strcmp(token, "Content")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
-#ifdef DEBUG
-					printf("Content Token: %s\n", token);
-#endif
-					/*
 					ticket_history->content
 						= malloc(strlen(token));
 					strcpy(ticket_history->content, ++token);
-					*/
+#ifdef DEBUG
+					printf("Content: %s\n", token);
+#endif
 				} else if (!strcmp(token, "Creator")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->creator
