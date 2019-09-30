@@ -35,13 +35,13 @@ int main(void)
 	rtclient_user_showname(&user, name);
 
 	if (user) {
-		printf("id: %u\nname: %s\npassword: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\ngecos: %s\nlang: %u\ntimezone: %u\nprivileged: %u\ndisabled: %u\n"
+		printf("id: %u\nName: %s\nPassword: %s\nEmail Address: %s\nReal Name: %s\nNick Name: %s\nOrganization: %s\nAddress 1: %s\nAddress 2: %s\nCity: %s\nState: %s\nZip: %s\nCountry: %s\nHomephone: %s\nWorkphone: %s\nMobilephone: %s\nPagerphone: %s\nContact Info: %s\nComments: %s\nSignature: %s\nGecos: %s\nLang: %u\nTimezone: %u\nPrivileged: %u\nDisabled: %u\n"
 				, user->id
 				, user->name
 				, user->password
-				, user->emailaddress
-				, user->realname
-				, user->nickname
+				, user->email_address
+				, user->real_name
+				, user->nick_name
 				, user->organization
 				, user->address1
 				, user->address2
@@ -49,11 +49,11 @@ int main(void)
 				, user->state
 				, user->zip
 				, user->country
-				, user->homephone
-				, user->workphone
-				, user->mobilephone
-				, user->pagerphone
-				, user->contactinfo
+				, user->home_phone
+				, user->work_phone
+				, user->mobile_phone
+				, user->pager_phone
+				, user->contact_info
 				, user->comments
 				, user->signature
 				, user->gecos

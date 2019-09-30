@@ -412,9 +412,9 @@ struct rtclient_user {
 	unsigned int id;
 	char *name;
 	char *password;
-	char *emailaddress;
-	char *realname;
-	char *nickname;
+	char *email_address;
+	char *real_name;
+	char *nick_name;
 	char *organization;
 	char *address1;
 	char *address2;
@@ -422,11 +422,11 @@ struct rtclient_user {
 	char *state;
 	char *zip;
 	char *country;
-	char *homephone;
-	char *workphone;
-	char *mobilephone;
-	char *pagerphone;
-	char *contactinfo;
+	char *home_phone;
+	char *work_phone;
+	char *mobile_phone;
+	char *pager_phone;
+	char *contact_info;
 	char *comments;
 	char *signature;
 	char *gecos;
@@ -442,9 +442,9 @@ extern "C" {
 
 	void rtclient_user_new(const char *name
 			, const char *password
-			, const char *emailaddress
-			, const char *realname
-			, const char *nickname
+			, const char *email_address
+			, const char *real_name
+			, const char *nick_name
 			, const char *organization
 			, const char *address1
 			, const char *address2
@@ -452,11 +452,11 @@ extern "C" {
 			, const char *state
 			, const char *zip
 			, const char *country
-			, const char *homephone
-			, const char *workphone
-			, const char *mobilephone
-			, const char *pagerphone
-			, const char *contactinfo
+			, const char *home_phone
+			, const char *work_phone
+			, const char *mobile_phone
+			, const char *pager_phone
+			, const char *contact_info
 			, const char *comments
 			, const char *signature
 			, const char *gecos

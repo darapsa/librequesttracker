@@ -7,9 +7,9 @@ typedef struct rtclient_user rtclient_user;
 
 void rtclient_user_new(const char *name
 		, const char *password
-		, const char *emailaddress
-		, const char *realname
-		, const char *nickname
+		, const char *email_address
+		, const char *real_name
+		, const char *nick_name
 		, const char *organization
 		, const char *address1
 		, const char *address2
@@ -17,11 +17,11 @@ void rtclient_user_new(const char *name
 		, const char *state
 		, const char *zip
 		, const char *country
-		, const char *homephone
-		, const char *workphone
-		, const char *mobilephone
-		, const char *pagerphone
-		, const char *contactinfo
+		, const char *home_phone
+		, const char *work_phone
+		, const char *mobile_phone
+		, const char *pager_phone
+		, const char *contact_info
 		, const char *comments
 		, const char *signature
 		, const char *gecos
@@ -33,9 +33,9 @@ void rtclient_user_new(const char *name
 	post("REST/1.0/user/new", (const char *[]){
 			name, "Name"
 			, password, "Password"
-			, emailaddress, "EmailAddress"
-			, realname, "RealName"
-			, nickname, "NickName"
+			, email_address, "EmailAddress"
+			, real_name, "RealName"
+			, nick_name, "NickName"
 			, organization, "Organization"
 			, address1, "Address1"
 			, address2, "Address2"
@@ -43,11 +43,11 @@ void rtclient_user_new(const char *name
 			, state, "State"
 			, zip, "Zip"
 			, country, "Country"
-			, homephone, "HomePhone"
-			, workphone, "WorkPhone"
-			, mobilephone, "MobilePhone"
-			, pagerphone, "PagerPhone"
-			, contactinfo, "ContactInfo"
+			, home_phone, "HomePhone"
+			, work_phone, "WorkPhone"
+			, mobile_phone, "MobilePhone"
+			, pager_phone, "PagerPhone"
+			, contact_info, "ContactInfo"
 			, comments, "Comments"
 			, signature, "Signature"
 			, gecos, "Gecos"
@@ -86,16 +86,16 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 				strcpy(user->name, ++token);
 			} else if (!strcmp(token, "EmailAddress")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->emailaddress = malloc(strlen(token));
-				strcpy(user->emailaddress, ++token);
+				user->email_address = malloc(strlen(token));
+				strcpy(user->email_address, ++token);
 			} else if (!strcmp(token, "RealName")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->realname = malloc(strlen(token));
-				strcpy(user->realname, ++token);
+				user->real_name = malloc(strlen(token));
+				strcpy(user->real_name, ++token);
 			} else if (!strcmp(token, "NickName")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->nickname = malloc(strlen(token));
-				strcpy(user->nickname, ++token);
+				user->nick_name = malloc(strlen(token));
+				strcpy(user->nick_name, ++token);
 			} else if (!strcmp(token, "Gecos")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->gecos = malloc(strlen(token));
@@ -130,24 +130,24 @@ static size_t show_callback(void *contents, size_t size, size_t nmemb
 				strcpy(user->country, ++token);
 			} else if (!strcmp(token, "HomePhone")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->homephone = malloc(strlen(token));
-				strcpy(user->homephone, ++token);
+				user->home_phone = malloc(strlen(token));
+				strcpy(user->home_phone, ++token);
 			} else if (!strcmp(token, "WorkPhone")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->workphone = malloc(strlen(token));
-				strcpy(user->workphone, ++token);
+				user->work_phone = malloc(strlen(token));
+				strcpy(user->work_phone, ++token);
 			} else if (!strcmp(token, "MobilePhone")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->mobilephone = malloc(strlen(token));
-				strcpy(user->mobilephone, ++token);
+				user->mobile_phone = malloc(strlen(token));
+				strcpy(user->mobile_phone, ++token);
 			} else if (!strcmp(token, "PagerPhone")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->pagerphone = malloc(strlen(token));
-				strcpy(user->pagerphone, ++token);
+				user->pager_phone = malloc(strlen(token));
+				strcpy(user->pager_phone, ++token);
 			} else if (!strcmp(token, "ContactInfo")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->contactinfo = malloc(strlen(token));
-				strcpy(user->contactinfo, ++token);
+				user->contact_info = malloc(strlen(token));
+				strcpy(user->contact_info, ++token);
 			} else if (!strcmp(token, "Comments")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->comments = malloc(strlen(token));
@@ -187,9 +187,9 @@ static inline void user_init(rtclient_user **userptr)
 	user->id = 0;
 	user->name = NULL;
 	user->password = NULL;
-	user->emailaddress = NULL;
-	user->realname = NULL;
-	user->nickname = NULL;
+	user->email_address = NULL;
+	user->real_name = NULL;
+	user->nick_name = NULL;
 	user->organization = NULL;
 	user->address1 = NULL;
 	user->address2 = NULL;
@@ -197,11 +197,11 @@ static inline void user_init(rtclient_user **userptr)
 	user->state = NULL;
 	user->zip = NULL;
 	user->country = NULL;
-	user->homephone = NULL;
-	user->workphone = NULL;
-	user->mobilephone = NULL;
-	user->pagerphone = NULL;
-	user->contactinfo = NULL;
+	user->home_phone = NULL;
+	user->work_phone = NULL;
+	user->mobile_phone = NULL;
+	user->pager_phone = NULL;
+	user->contact_info = NULL;
 	user->comments = NULL;
 	user->signature = NULL;
 	user->gecos = NULL;
@@ -231,12 +231,12 @@ void rtclient_user_free(rtclient_user *user)
 		free(user->name);
 	if (user->password)
 		free(user->password);
-	if (user->emailaddress)
-		free(user->emailaddress);
-	if (user->realname)
-		free(user->realname);
-	if (user->nickname)
-		free(user->nickname);
+	if (user->email_address)
+		free(user->email_address);
+	if (user->real_name)
+		free(user->real_name);
+	if (user->nick_name)
+		free(user->nick_name);
 	if (user->organization)
 		free(user->organization);
 	if (user->address1)
@@ -251,16 +251,16 @@ void rtclient_user_free(rtclient_user *user)
 		free(user->zip);
 	if (user->country)
 		free(user->country);
-	if (user->homephone)
-		free(user->homephone);
-	if (user->workphone)
-		free(user->workphone);
-	if (user->mobilephone)
-		free(user->mobilephone);
-	if (user->pagerphone)
-		free(user->pagerphone);
-	if (user->contactinfo)
-		free(user->contactinfo);
+	if (user->home_phone)
+		free(user->home_phone);
+	if (user->work_phone)
+		free(user->work_phone);
+	if (user->mobile_phone)
+		free(user->mobile_phone);
+	if (user->pager_phone)
+		free(user->pager_phone);
+	if (user->contact_info)
+		free(user->contact_info);
 	if (user->comments)
 		free(user->comments);
 	if (user->signature)
