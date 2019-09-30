@@ -7,15 +7,16 @@ struct rtclient_ticket {
 };
 
 enum rtclient_ticket_history_type {
-	RTCLIENT_TICKET_HISTORY_TYPE_CREATE
-	, RTCLIENT_TICKET_HISTORY_TYPE_EMAILRECORD
+	RTCLIENT_TICKET_HISTORY_TYPE_CREATE = 0
+	, RTCLIENT_TICKET_HISTORY_TYPE_EMAIL_RECORD
 	, RTCLIENT_TICKET_HISTORY_TYPE_SET
-	, RTCLIENT_TICKET_HISTORY_TYPE_SETWATCHER
+	, RTCLIENT_TICKET_HISTORY_TYPE_SET_WATCHER
 	, RTCLIENT_TICKET_HISTORY_TYPE_STATUS
+	, RTCLIENT_TICKET_HISTORY_TYPE_UNKNOWN
 };
 
 enum rtclient_ticket_history_field {
-	RTCLIENT_TICKET_HISTORY_FIELD_NONE
+	RTCLIENT_TICKET_HISTORY_FIELD_NONE = 0
 	, RTCLIENT_TICKET_HISTORY_FIELD_PRIORITY
 	, RTCLIENT_TICKET_HISTORY_FIELD_STATUS
 	, RTCLIENT_TICKET_HISTORY_FIELD_OWNER
@@ -27,14 +28,22 @@ struct rtclient_ticket_history {
 	unsigned int time_taken;
 	enum rtclient_ticket_history_type type;
 	enum rtclient_ticket_history_field field;
-	const char *old_value;
-	const char *new_value;
-	const char *data;
-	const char *description;
-	const char *content;
-	const char *creator;
+	char *old_value;
+	char *new_value;
+	char *data;
+	char *description;
+	char *content;
+	char *creator;
 	struct tm *created;
-	const char *attachments;
+	struct {
+		size_t length;
+		const char *attachments[];
+	};
+};
+
+struct rtclient_ticket_history_list {
+	size_t length;
+	struct rtclient_ticket_history *histories[];
 };
 
 #ifdef __cplusplus
@@ -55,7 +64,8 @@ extern "C" {
 			, const char *starts
 			, const char *due
 			, const char *text);
-	void rtclient_ticket_history(unsigned int id);
+	void rtclient_ticket_history(struct rtclient_ticket_history_list **listptr
+			, unsigned int id);
 
 #ifdef __cplusplus
 }
