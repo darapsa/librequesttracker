@@ -25,8 +25,8 @@ void rtclient_user_new(const char *name
 		, const char *comments
 		, const char *signature
 		, const char *gecos
-		, enum rtclient_lang lang
-		, enum rtclient_timezone timezone
+		, enum rtclient_user_lang lang
+		, enum rtclient_user_timezone timezone
 		, bool disabled
 		, bool privileged)
 {
@@ -205,8 +205,8 @@ static inline void user_init(rtclient_user **userptr)
 	user->comments = NULL;
 	user->signature = NULL;
 	user->gecos = NULL;
-	user->lang = RTCLIENT_LANG_NONE;
-	user->timezone = RTCLIENT_TIMEZONE_NONE;
+	user->lang = RTCLIENT_USER_LANG_NONE;
+	user->timezone = RTCLIENT_USER_TIMEZONE_NONE;
 	user->privileged = false;
 	user->disabled = true;
 }
