@@ -3,7 +3,7 @@
 #include "rtclient/ticket.h"
 
 typedef struct rtclient_ticket rtclient_ticket;
-typedef struct rtclient_ticketlist rtclient_ticketlist;
+typedef struct rtclient_ticket_list rtclient_ticket_list;
 
 void rtclient_ticket_new(const char *queue
 			, const char *requestor
@@ -48,7 +48,7 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 	response[realsize] = '\0';
 	char lines[strlen(response) + 1];
 	strcpy(lines, response);
-	rtclient_ticketlist **listptr = (rtclient_ticketlist **)writedata;
+	rtclient_ticket_list **listptr = (rtclient_ticket_list **)writedata;
 
 	char *line = strtok(response, "\n");
 	if (strstr(line, "200 Ok")) {
@@ -62,10 +62,10 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 			}
 		} while ((line = strtok(NULL, "\n")));
 
-		rtclient_ticketlist *ptr = realloc(*listptr, sizeof(*listptr)
+		rtclient_ticket_list *ptr = realloc(*listptr, sizeof(*listptr)
 				+ (*listptr)->length * sizeof(rtclient_ticket));
 		*listptr = ptr;
-		rtclient_ticketlist *list = *listptr;
+		rtclient_ticket_list *list = *listptr;
 
 		char *linesaveptr = NULL;
 		line = strtok_r(lines, "\n", &linesaveptr);
@@ -97,9 +97,9 @@ static size_t search_callback(void *contents, size_t size, size_t nmemb
 	return realsize;
 }
 
-void rtclient_ticket_search(rtclient_ticketlist **listptr, const char *query)
+void rtclient_ticket_search(rtclient_ticket_list **listptr, const char *query)
 {
-	*listptr = malloc(sizeof(rtclient_ticketlist));
+	*listptr = malloc(sizeof(rtclient_ticket_list));
 	(*listptr)->length = 0;
 	request(search_callback, (void *)listptr, NULL, "%s%s"
 			, "REST/1.0/search/ticket?query=", query);
@@ -111,7 +111,7 @@ void rtclient_ticket_history(unsigned int id)
 			, "/history?format=l");
 }
 
-void rtclient_ticket_freelist(rtclient_ticketlist *list)
+void rtclient_ticket_freelist(rtclient_ticket_list *list)
 {
 	for (size_t i = 0; i < list->length; i++) {
 		rtclient_ticket *ticket = list->tickets[i];

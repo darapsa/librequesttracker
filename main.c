@@ -63,7 +63,7 @@ int main(void)
 				, user->disabled);
 		rtclient_user_free(user);
 
-		struct rtclient_ticketlist *list = NULL;
+		struct rtclient_ticket_list *list = NULL;
 		static const char *prefix = "Owner='";
 		char query[strlen(prefix) + strlen(name) + 2];
 		sprintf(query, "%s%s'", prefix, name);

@@ -6,7 +6,7 @@ struct rtclient_ticket {
 	char *subject;
 };
 
-struct rtclient_ticketlist {
+struct rtclient_ticket_list {
 	size_t length;
 	struct rtclient_ticket *tickets[];
 };
@@ -29,10 +29,10 @@ extern "C" {
 			, const char *starts
 			, const char *due
 			, const char *text);
-	void rtclient_ticket_search(struct rtclient_ticketlist **listptr
+	void rtclient_ticket_search(struct rtclient_ticket_list **listptr
 			, const char *query);
 	void rtclient_ticket_history(unsigned int id);
-	void rtclient_ticket_freelist(struct rtclient_ticketlist *list);
+	void rtclient_ticket_freelist(struct rtclient_ticket_list *list);
 
 #ifdef __cplusplus
 }
