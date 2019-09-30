@@ -9,13 +9,13 @@ void rtclient_ticket_new(const char *queue
 			, const char *requestor
 			, const char *subject
 			, const char *cc
-			, const char *admincc
+			, const char *admin_cc
 			, const char *owner
 			, const char *status
 			, const char *priority
-			, const char *initialpriority
-			, const char *finalpriority
-			, const char *timeestimated
+			, const char *initial_priority
+			, const char *final_priority
+			, const char *time_estimated
 			, const char *starts
 			, const char *due
 			, const char *text)
@@ -26,13 +26,13 @@ void rtclient_ticket_new(const char *queue
 			, requestor, "Requestor"
 			, subject, "Subject"
 			, cc, "Cc"
-			, admincc, "AdminCc"
+			, admin_cc, "AdminCc"
 			, owner, "Owner"
 			, status, "Status"
 			, priority, "Priority"
-			, initialpriority, "InitialPriority"
-			, finalpriority, "FinalPriority"
-			, timeestimated, "TimeEstimated"
+			, initial_priority, "InitialPriority"
+			, final_priority, "FinalPriority"
+			, time_estimated, "TimeEstimated"
 			, starts, "Starts"
 			, due, "Due"
 			, text, "Text"
