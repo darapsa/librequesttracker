@@ -2,6 +2,7 @@ noinst_LIBRARIES = librtclient.a
 librtclient_a_SOURCES = \
 			rtclient/user.h \
 			rtclient/ticket.h \
+			rtclient/search.h \
 			rtclient/client.h \
 			request.h \
 			request.c \
@@ -9,6 +10,7 @@ librtclient_a_SOURCES = \
 			post.c \
 			user.c \
 			ticket.c \
+			search.c \
 			client.c
 librtclient_a_CFLAGS = -fPIC
 

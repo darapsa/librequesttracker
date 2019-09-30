@@ -5,6 +5,7 @@
 #include <rtclient/client.h>
 #include <rtclient/user.h>
 #include <rtclient/ticket.h>
+#include <rtclient/search.h>
 
 int main(void)
 {
@@ -63,17 +64,17 @@ int main(void)
 				, user->disabled);
 		rtclient_user_free(user);
 
-		struct rtclient_ticket_list *list = NULL;
+		struct rtclient_search_ticket_list *list = NULL;
 		static const char *prefix = "Owner='";
 		char query[strlen(prefix) + strlen(name) + 2];
 		sprintf(query, "%s%s'", prefix, name);
-		rtclient_ticket_search(&list, query);
+		rtclient_search_ticket(&list, query);
 		if (list) {
 			for (size_t i = 0; i < list->length; i++) {
 				struct rtclient_ticket *ticket = list->tickets[i];
 				printf("%u: %s\n", ticket->id, ticket->subject);
 			}
-			rtclient_ticket_freelist(list);
+			rtclient_search_ticket_free(list);
 		}
 	}
 	free(name);

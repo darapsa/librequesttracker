@@ -6,11 +6,6 @@ struct rtclient_ticket {
 	char *subject;
 };
 
-struct rtclient_ticket_list {
-	size_t length;
-	struct rtclient_ticket *tickets[];
-};
-
 enum rtclient_ticket_history_type {
 	RTCLIENT_TICKET_HISTORY_TYPE_CREATE
 	, RTCLIENT_TICKET_HISTORY_TYPE_EMAILRECORD
@@ -60,10 +55,7 @@ extern "C" {
 			, const char *starts
 			, const char *due
 			, const char *text);
-	void rtclient_ticket_search(struct rtclient_ticket_list **listptr
-			, const char *query);
 	void rtclient_ticket_history(unsigned int id);
-	void rtclient_ticket_freelist(struct rtclient_ticket_list *list);
 
 #ifdef __cplusplus
 }
