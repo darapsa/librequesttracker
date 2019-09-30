@@ -107,7 +107,7 @@ void rtclient_ticket_search(rtclient_ticketlist **listptr, const char *query)
 
 void rtclient_ticket_history(unsigned int id)
 {
-	request(NULL, NULL, NULL, "%s%d%s", "REST/1.0/ticket/", id
+	request(NULL, NULL, NULL, "%s%u%s", "REST/1.0/ticket/", id
 			, "/history?format=l");
 }
 

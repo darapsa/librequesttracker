@@ -29,7 +29,7 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 				sval = va_arg(ap, char *);
 				length += strlen(sval) - 2;
 				break;
-			case 'd':
+			case 'u':
 				ival = va_arg(ap, unsigned int);
 				do {
 					length++;
@@ -54,9 +54,9 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 				sval = va_arg(ap, char *);
 				strcat(url, sval);
 				break;
-			case 'd':
+			case 'u':
 				ival = va_arg(ap, unsigned int);
-				sprintf(url, "%s%d", url, ival);
+				sprintf(url, "%s%u", url, ival);
 				break;
 			default:
 				break;

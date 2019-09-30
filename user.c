@@ -214,7 +214,7 @@ static inline void user_init(rtclient_user **userptr)
 void rtclient_user_showid(rtclient_user **userptr, unsigned int id)
 {
 	user_init(userptr);
-	request(show_callback, (void *)userptr, NULL, "%s%d", "REST/1.0/user/"
+	request(show_callback, (void *)userptr, NULL, "%s%u", "REST/1.0/user/"
 			, id);
 }
 

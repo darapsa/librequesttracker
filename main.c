@@ -35,7 +35,7 @@ int main(void)
 	rtclient_user_showname(&user, name);
 
 	if (user) {
-		printf("id: %d\nname: %s\npassword: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\ngecos: %s\nlang: %d\ntimezone: %d\nprivileged: %d\ndisabled: %d\n"
+		printf("id: %u\nname: %s\npassword: %s\nemailaddress: %s\nrealname: %s\nnickname: %s\norganization: %s\naddress1: %s\naddress2: %s\ncity: %s\nstate: %s\nzip: %s\ncountry: %s\nhomephone: %s\nworkphone: %s\nmobilephone: %s\npagerphone: %s\ncontactinfo: %s\ncomments: %s\nsignature: %s\ngecos: %s\nlang: %u\ntimezone: %u\nprivileged: %u\ndisabled: %u\n"
 				, user->id
 				, user->name
 				, user->password
@@ -71,7 +71,7 @@ int main(void)
 		if (list) {
 			for (size_t i = 0; i < list->length; i++) {
 				struct rtclient_ticket *ticket = list->tickets[i];
-				printf("%d: %s\n", ticket->id, ticket->subject);
+				printf("%u: %s\n", ticket->id, ticket->subject);
 			}
 			rtclient_ticket_freelist(list);
 		}
