@@ -39,7 +39,7 @@ void rtclient_ticket_new(const char *queue
 			}, 28);
 }
 
-static size_t search_callback(void *contents, size_t size, size_t nmemb
+static size_t search_handler(void *contents, size_t size, size_t nmemb
 		, void *writedata)
 {
 	size_t realsize = size * nmemb;
@@ -101,7 +101,7 @@ void rtclient_ticket_search(rtclient_ticket_list **listptr, const char *query)
 {
 	*listptr = malloc(sizeof(rtclient_ticket_list));
 	(*listptr)->length = 0;
-	request(search_callback, (void *)listptr, NULL, "%s%s"
+	request(search_handler, (void *)listptr, NULL, "%s%s"
 			, "REST/1.0/search/ticket?query=", query);
 }
 

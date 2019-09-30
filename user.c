@@ -54,7 +54,7 @@ void rtclient_user_new(const char *name
 	}, 40);
 }
 
-static size_t show_callback(void *contents, size_t size, size_t nmemb
+static size_t show_handler(void *contents, size_t size, size_t nmemb
 		, void *writedata)
 {
 	size_t realsize = size * nmemb;
@@ -214,14 +214,14 @@ static inline void user_init(rtclient_user **userptr)
 void rtclient_user_showid(rtclient_user **userptr, unsigned int id)
 {
 	user_init(userptr);
-	request(show_callback, (void *)userptr, NULL, "%s%u", "REST/1.0/user/"
+	request(show_handler, (void *)userptr, NULL, "%s%u", "REST/1.0/user/"
 			, id);
 }
 
 void rtclient_user_showname(rtclient_user **userptr, const char *name)
 {
 	user_init(userptr);
-	request(show_callback, (void *)userptr, NULL, "%s%s", "REST/1.0/user/"
+	request(show_handler, (void *)userptr, NULL, "%s%s", "REST/1.0/user/"
 			, name);
 }
 
