@@ -132,7 +132,8 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 							= malloc(strlen(token));
 						strcpy(ticket_history->old_value
 								, ++token);
-					}
+					} else
+						ticket_history->old_value = NULL;
 				} else if (!strcmp(token, "NewValue")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					if (token && strcmp(token, "")) {
@@ -140,7 +141,8 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 							= malloc(strlen(token));
 						strcpy(ticket_history->new_value
 								, ++token);
-					}
+					} else
+						ticket_history->new_value = NULL;
 				} else if (!strcmp(token, "Data")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->data
@@ -210,6 +212,7 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 						= atoi(token);
 				} else if (!strcmp(token, "Attachments")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
+					ticket_history->attachments = NULL;
 					break;
 				}
 			}  while ((line = strtok_r(NULL, "\n", &linesaveptr)));
