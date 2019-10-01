@@ -85,21 +85,12 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 				if (!strcmp(token, "id")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->id = atoi(++token);
-#ifdef DEBUG
-					printf("ID: %u\n", ticket_history->id);
-#endif
 				} else if (!strcmp(token, "Ticket")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->ticket = atoi(++token);
-#ifdef DEBUG
-					printf("Ticket: %u\n", ticket_history->ticket);
-#endif
 				} else if (!strcmp(token, "TimeTaken")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->time_taken = atoi(++token);
-#ifdef DEBUG
-					printf("Time Taken: %u\n", ticket_history->time_taken);
-#endif
 				} else if (!strcmp(token, "Type")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					if (!strcmp(++token, "Create"))
@@ -120,9 +111,6 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 					else
 						ticket_history->type
 							= RTCLIENT_TICKET_HISTORY_TYPE_UNKNOWN;
-#ifdef DEBUG
-					printf("Type: %u\n", ticket_history->type);
-#endif
 				} else if (!strcmp(token, "Field")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					if (!strcmp(++token, "Priority"))
@@ -137,9 +125,6 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 					else
 						ticket_history->field
 							= RTCLIENT_TICKET_HISTORY_FIELD_NONE;
-#ifdef DEBUG
-					printf("Field: %u\n", ticket_history->field);
-#endif
 				} else if (!strcmp(token, "OldValue")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					if (token && strcmp(token, "")) {
@@ -147,9 +132,6 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 							= malloc(strlen(token));
 						strcpy(ticket_history->old_value
 								, ++token);
-#ifdef DEBUG
-						printf("Old Value: %s\n", ticket_history->old_value);
-#endif
 					}
 				} else if (!strcmp(token, "NewValue")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
@@ -158,27 +140,18 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 							= malloc(strlen(token));
 						strcpy(ticket_history->new_value
 								, ++token);
-#ifdef DEBUG
-						printf("New Value: %s\n", ticket_history->new_value);
-#endif
 					}
 				} else if (!strcmp(token, "Data")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->data
 						= malloc(strlen(token));
 					strcpy(ticket_history->data, ++token);
-#ifdef DEBUG
-					printf("Data: %s\n", ticket_history->data);
-#endif
 				} else if (!strcmp(token, "Description")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->description
 						= malloc(strlen(token));
 					strcpy(ticket_history->description
 							, ++token);
-#ifdef DEBUG
-					printf("Description: %s\n", ticket_history->description);
-#endif
 				} else if (!strcmp(token, "Content")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->content
@@ -192,13 +165,10 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 					ticket_history->creator
 						= malloc(strlen(token));
 					strcpy(ticket_history->creator, ++token);
-#ifdef DEBUG
-					printf("Creator: %s\n", ticket_history->creator);
-#endif
 				} else if (!strcmp(token, "Created")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 #ifdef DEBUG
-					printf("Created Token: %s\n", token);
+					printf("Created: %s\n", token);
 #endif
 					/*
 					ticket_history->created
