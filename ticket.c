@@ -145,9 +145,13 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 						ticket_history->new_value = NULL;
 				} else if (!strcmp(token, "Data")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
-					ticket_history->data
-						= malloc(strlen(token));
-					strcpy(ticket_history->data, ++token);
+					if (token && strcmp(token, "")) {
+						ticket_history->data
+							= malloc(strlen(token));
+						strcpy(ticket_history->data
+								, ++token);
+					} else
+						ticket_history->data = NULL;
 				} else if (!strcmp(token, "Description")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->description
