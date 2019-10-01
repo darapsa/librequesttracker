@@ -160,10 +160,34 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 					strcpy(ticket_history->description
 							, ++token);
 				} else if (!strcmp(token, "Content")) {
+					if (ticket_history->type
+							== RTCLIENT_TICKET_HISTORY_TYPE_EMAIL_RECORD) {
+						ticket_history->content = NULL;
+						break;
+					}
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->content
 						= malloc(strlen(token));
 					strcpy(ticket_history->content, ++token);
+					/*
+					while ((history = strtok_r(NULL, "#"
+									, &historysaveptr))) {
+						list->length--;
+						char *ptr = realloc(ticket_history
+								->content
+								, strlen
+								(ticket_history
+								 ->content)
+								+ strlen(history)
+								+ 2);
+						ticket_history->content = ptr;
+						sprintf(ticket_history->content
+								, "%s#%s"
+								, ticket_history
+								->content
+								, history);
+					}
+					*/
 					while ((line = strtok_r(NULL, "\n"
 								, &linesaveptr))) {
 						if (!strncmp(line, "Creator", 7))
