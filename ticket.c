@@ -166,6 +166,8 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 					strcpy(ticket_history->content, ++token);
 					while ((line = strtok_r(NULL, "\n"
 								, &linesaveptr))) {
+						if (!strncmp(line, "Creator", 7))
+							break;
 						char *ptr = realloc(ticket_history
 								->content
 								, strlen
