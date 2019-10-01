@@ -181,19 +181,35 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 						= malloc(strlen(token));
 					strcpy(ticket_history->creator, ++token);
 				} else if (!strcmp(token, "Created")) {
-					token = strtok_r(NULL, ":", &tokensaveptr);
-#ifdef DEBUG
-					printf("Created: %s\n", token);
-#endif
-					/*
 					ticket_history->created
 						= malloc(sizeof(struct tm));
-						*/
+					ticket_history->created->tm_isdst = -1;
+					token = strtok_r(NULL, ":", &tokensaveptr);
+					char *tmsaveptr = NULL;
+					char *tm = strtok_r(token, " "
+							, &tmsaveptr);
+					char *datesaveptr = NULL;
+					char *date = strtok_r(tm, "-"
+							, &datesaveptr);
+					ticket_history->created->tm_year
+						= atoi(date) - 1900;
+					date = strtok_r(NULL, "-", &datesaveptr);
+					ticket_history->created->tm_mon
+						= atoi(date) - 1;
+					date = strtok_r(NULL, "-", &datesaveptr);
+					ticket_history->created->tm_mday
+						= atoi(date);
+					tm = strtok_r(NULL, " ", &tmsaveptr);
+					ticket_history->created->tm_hour
+						= atoi(tm);
+					token = strtok_r(NULL, ":", &tokensaveptr);
+					ticket_history->created->tm_min
+						= atoi(token);
+					token = strtok_r(NULL, ":", &tokensaveptr);
+					ticket_history->created->tm_sec
+						= atoi(token);
 				} else if (!strcmp(token, "Attachments")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
-#ifdef DEBUG
-					printf("Attachments: %s\n", token);
-#endif
 					break;
 				}
 			}  while ((line = strtok_r(NULL, "\n", &linesaveptr)));
