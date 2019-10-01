@@ -3,6 +3,7 @@
 #include "rtclient/ticket.h"
 
 typedef struct rtclient_ticket rtclient_ticket;
+typedef struct rtclient_ticket_history_attachment rtclient_ticket_history_attachment;
 typedef struct rtclient_ticket_history_list rtclient_ticket_history_list;
 
 void rtclient_ticket_new(const char *queue
@@ -246,4 +247,38 @@ void rtclient_ticket_history(rtclient_ticket_history_list **listptr
 	(*listptr)->length = 0;
 	request(history_handler, (void *)listptr, NULL, "%s%u%s"
 			, "REST/1.0/ticket/", id, "/history?format=l");
+}
+
+void rtclient_ticket_history_free(struct rtclient_ticket_history *history)
+{
+	if (history->attachments) {
+		for(size_t i = 0; i < history->attachments->length; i++) {
+			rtclient_ticket_history_attachment *attachment
+				= history->attachments->attachments[i];
+			if (attachment->file_name)
+				free(attachment->file_name);
+			free(attachment);
+		}
+		free(history->attachments);
+	}
+	free(history->created);
+	free(history->creator);
+	free(history->content);
+	free(history->description);
+	if (history->data)
+		free(history->data);
+	if (history->new_value)
+		free(history->new_value);
+	if (history->old_value)
+		free(history->old_value);
+	free(history);
+	history = NULL;
+}
+
+void rtclient_ticket_history_list_free(struct rtclient_ticket_history_list *list)
+{
+	for (size_t i = 0; i < list->length; i++)
+		rtclient_ticket_history_free(list->histories[i]);
+	free(list);
+	list = NULL;
 }

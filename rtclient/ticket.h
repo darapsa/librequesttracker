@@ -72,6 +72,10 @@ extern "C" {
 			, const char *text);
 	void rtclient_ticket_history(struct rtclient_ticket_history_list **listptr
 			, unsigned int id);
+	void rtclient_ticket_history_free
+		(struct rtclient_ticket_history *history);
+	void rtclient_ticket_history_list_free
+		(struct rtclient_ticket_history_list *list);
 
 #ifdef __cplusplus
 }
