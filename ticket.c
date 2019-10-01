@@ -190,8 +190,15 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 					*/
 					while ((line = strtok_r(NULL, "\n"
 								, &linesaveptr))) {
-						if (!strncmp(line, "Creator", 7))
+						if (!strncmp(line, "Creator", 7)) {
+							ticket_history->creator
+								= malloc(strlen(line)
+										- 8);
+							line += 9;
+							strcpy(ticket_history->creator
+									, line);
 							break;
+						}
 						char *ptr = realloc(ticket_history
 								->content
 								, strlen
