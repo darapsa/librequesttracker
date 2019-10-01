@@ -157,9 +157,24 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 					ticket_history->content
 						= malloc(strlen(token));
 					strcpy(ticket_history->content, ++token);
-#ifdef DEBUG
-					printf("Content: %s\n", token);
-#endif
+					while ((line = strtok_r(NULL, "\n"
+								, &linesaveptr))) {
+						if (!strncmp(line, "Creator", 7))
+							break;
+						char *ptr = realloc(ticket_history
+								->content
+								, strlen
+								(ticket_history
+								 ->content)
+								+ strlen(line)
+								+ 2);
+						ticket_history->content = ptr;
+						sprintf(ticket_history->content
+								, "%s\n%s"
+								, ticket_history
+								->content
+								, line);
+					}
 				} else if (!strcmp(token, "Creator")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->creator
