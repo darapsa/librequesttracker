@@ -22,6 +22,12 @@ enum rtclient_ticket_history_field {
 	, RTCLIENT_TICKET_HISTORY_FIELD_OWNER
 };
 
+struct rtclient_ticket_history_attachment {
+	unsigned int id;
+	char *file_name;
+	size_t size;
+};
+
 struct rtclient_ticket_history {
 	unsigned int id;
 	unsigned int ticket;
@@ -37,8 +43,8 @@ struct rtclient_ticket_history {
 	struct tm *created;
 	struct {
 		size_t length;
-		const char *attachments[];
-	};
+		struct rtclient_ticket_history_attachment *attachments[];
+	} *attachments;
 };
 
 struct rtclient_ticket_history_list {
