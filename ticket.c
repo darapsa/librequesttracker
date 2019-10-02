@@ -177,9 +177,6 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 					else if (!strcmp(token, "Status"))
 						ticket_history->type
 							= RTCLIENT_TICKET_HISTORY_TYPE_STATUS;
-					else
-						ticket_history->type
-							= RTCLIENT_TICKET_HISTORY_TYPE_UNKNOWN;
 				} else if (!strcmp(token, "Field")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					if (!strcmp(++token, "Priority"))
@@ -191,9 +188,6 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 					else if (!strcmp(token, "Owner"))
 						ticket_history->field
 							= RTCLIENT_TICKET_HISTORY_FIELD_OWNER;
-					else
-						ticket_history->field
-							= RTCLIENT_TICKET_HISTORY_FIELD_NONE;
 				} else if (!strcmp(token, "OldValue")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					if (token && strcmp(token, "")) {
@@ -201,8 +195,7 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 							= malloc(strlen(token));
 						strcpy(ticket_history->old_value
 								, ++token);
-					} else
-						ticket_history->old_value = NULL;
+					}
 				} else if (!strcmp(token, "NewValue")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					if (token && strcmp(token, "")) {
@@ -210,8 +203,7 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 							= malloc(strlen(token));
 						strcpy(ticket_history->new_value
 								, ++token);
-					} else
-						ticket_history->new_value = NULL;
+					}
 				} else if (!strcmp(token, "Data")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					if (token && strcmp(token, "")) {
@@ -219,8 +211,7 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 							= malloc(strlen(token));
 						strcpy(ticket_history->data
 								, ++token);
-					} else
-						ticket_history->data = NULL;
+					}
 				} else if (!strcmp(token, "Description")) {
 					token = strtok_r(NULL, ":", &tokensaveptr);
 					ticket_history->description
