@@ -235,8 +235,6 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 
 			strtok_r(line, ":", &tokensaveptr);
 			token = strtok_r(NULL, ":", &tokensaveptr);
-			ticket_history->description = malloc(strlen(token));
-			strcpy(ticket_history->description, ++token);
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
 			strtok_r(line, ":", &tokensaveptr);
