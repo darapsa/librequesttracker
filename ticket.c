@@ -287,6 +287,15 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 			size_t i = 0;
 			while (strcmp(line, "--")) {
 				i = ticket_history->attachments->length++;
+				rtclient_ticket_history_attachment_list *ptr
+					= realloc(ticket_history->attachments
+							, sizeof(ticket_history
+								->attachments)
+							+ ticket_history
+							->attachments->length
+							* sizeof
+							(rtclient_ticket_history_attachment));
+				ticket_history->attachments = ptr;
 				ticket_history->attachments->attachments[i]
 					= malloc
 					(sizeof
