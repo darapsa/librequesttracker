@@ -40,7 +40,29 @@ void rtclient_ticket_new(const char *queue
 			}, 28);
 }
 
-static size_t history_handler(void *contents, size_t size, size_t nmemb
+static size_t history_i_handler(void *contents, size_t size, size_t nmemb
+		, void *writedata)
+{
+	size_t realsize = size * nmemb;
+	char response[realsize + 1];
+	memcpy(response, contents, realsize);
+	response[realsize] = '\0';
+
+	return realsize;
+}
+
+static size_t history_s_handler(void *contents, size_t size, size_t nmemb
+		, void *writedata)
+{
+	size_t realsize = size * nmemb;
+	char response[realsize + 1];
+	memcpy(response, contents, realsize);
+	response[realsize] = '\0';
+
+	return realsize;
+}
+
+static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 		, void *writedata)
 {
 	size_t realsize = size * nmemb;
@@ -272,12 +294,27 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 }
 
 void rtclient_ticket_history(rtclient_ticket_history_list **listptr
-		, unsigned int id)
+		, unsigned int id
+		, enum rtclient_ticket_result_format result_format)
 {
 	*listptr = malloc(sizeof(rtclient_ticket_history_list));
 	(*listptr)->length = 0;
-	request(history_handler, (void *)listptr, NULL, "%s%u%s"
-			, "REST/1.0/ticket/", id, "/history?format=l");
+	size_t (*handler)(void *, size_t, size_t, void *) = history_s_handler;
+	char format = 's';
+	switch (result_format) {
+		case RTCLIENT_TICKET_RESULT_FORMAT_I:
+			handler = history_i_handler;
+			format = 'i';
+			break;
+		case RTCLIENT_TICKET_RESULT_FORMAT_L:
+			handler = history_l_handler;
+			format = 'l';
+			break;
+		default:
+			break;
+	}
+	request(handler, (void *)listptr, NULL, "%s%u%s%c", "REST/1.0/ticket/", id
+			, "/history?format=", format);
 }
 
 void rtclient_ticket_history_free(struct rtclient_ticket_history *history)

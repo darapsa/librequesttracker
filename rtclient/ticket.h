@@ -6,6 +6,12 @@ struct rtclient_ticket {
 	char *subject;
 };
 
+enum rtclient_ticket_result_format {
+	RTCLIENT_TICKET_RESULT_FORMAT_S = 0
+	, RTCLIENT_TICKET_RESULT_FORMAT_I
+	, RTCLIENT_TICKET_RESULT_FORMAT_L
+};
+
 enum rtclient_ticket_history_type {
 	RTCLIENT_TICKET_HISTORY_TYPE_UNKNOWN = 0
 	, RTCLIENT_TICKET_HISTORY_TYPE_CREATE
@@ -71,7 +77,8 @@ extern "C" {
 			, const char *due
 			, const char *text);
 	void rtclient_ticket_history(struct rtclient_ticket_history_list **listptr
-			, unsigned int id);
+			, unsigned int id
+			, enum rtclient_ticket_result_format result_format);
 	void rtclient_ticket_history_free
 		(struct rtclient_ticket_history *history);
 	void rtclient_ticket_history_list_free
