@@ -1,15 +1,11 @@
 #ifndef RTCLIENT_TICKET_H
 #define RTCLIENT_TICKET_H
 
+#include <stdbool.h>
+
 struct rtclient_ticket {
 	unsigned int id;
 	char *subject;
-};
-
-enum rtclient_ticket_format {
-	RTCLIENT_TICKET_FORMAT_S = 0
-	, RTCLIENT_TICKET_FORMAT_I
-	, RTCLIENT_TICKET_FORMAT_L
 };
 
 enum rtclient_ticket_history_type {
@@ -77,8 +73,7 @@ extern "C" {
 			, const char *due
 			, const char *text);
 	void rtclient_ticket_history(struct rtclient_ticket_history_list **listptr
-			, unsigned int id
-			, enum rtclient_ticket_format result_format);
+			, unsigned int id, bool long_format);
 	void rtclient_ticket_history_free
 		(struct rtclient_ticket_history *history);
 	void rtclient_ticket_history_list_free
