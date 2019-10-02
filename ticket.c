@@ -295,18 +295,18 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 
 void rtclient_ticket_history(rtclient_ticket_history_list **listptr
 		, unsigned int id
-		, enum rtclient_ticket_result_format result_format)
+		, enum rtclient_ticket_format result_format)
 {
 	*listptr = malloc(sizeof(rtclient_ticket_history_list));
 	(*listptr)->length = 0;
 	size_t (*handler)(void *, size_t, size_t, void *) = history_s_handler;
 	char format = 's';
 	switch (result_format) {
-		case RTCLIENT_TICKET_RESULT_FORMAT_I:
+		case RTCLIENT_TICKET_FORMAT_I:
 			handler = history_i_handler;
 			format = 'i';
 			break;
-		case RTCLIENT_TICKET_RESULT_FORMAT_L:
+		case RTCLIENT_TICKET_FORMAT_L:
 			handler = history_l_handler;
 			format = 'l';
 			break;
