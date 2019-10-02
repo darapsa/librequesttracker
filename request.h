@@ -66,6 +66,7 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 				break;
 			case 'c':
 				url[length++] = (char)va_arg(ap, int);
+				url[length] = '\0';
 				break;
 			default:
 				break;
