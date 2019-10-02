@@ -47,6 +47,63 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 	char response[realsize + 1];
 	memcpy(response, contents, realsize);
 	response[realsize] = '\0';
+	rtclient_ticket_history_list **listptr
+		= (rtclient_ticket_history_list **)writedata;
+
+	char *linesaveptr = NULL;
+	char *line = strtok_r(response, "\n", &linesaveptr);
+	if (strstr(line, "200 Ok")) {
+
+		line = strtok_r(NULL, "\n", &linesaveptr);
+		char *length = strtok(line, "/");
+		(*listptr)->length = atoi(&length[2]);
+		rtclient_ticket_history_list *ptr = realloc(*listptr
+				, sizeof(*listptr)
+				+ (*listptr)->length
+				* sizeof(struct rtclient_ticket_history));
+		*listptr = ptr;
+		rtclient_ticket_history_list *list = *listptr;
+
+		char *tokensaveptr = NULL, *token = NULL;
+		for (size_t i = 0; i < list->length; i++) {
+			line = strtok_r(NULL, "\n", &linesaveptr);
+			list->histories[i]
+				= malloc(sizeof(struct rtclient_ticket_history));
+			struct rtclient_ticket_history *ticket_history
+				= list->histories[i];
+
+			token = strtok_r(line, ":", &tokensaveptr);
+			ticket_history->id = atoi(++token);
+
+			ticket_history->ticket = 0;
+			ticket_history->time_taken = 0;
+			ticket_history->type = RTCLIENT_TICKET_HISTORY_TYPE_NONE;
+			ticket_history->field = RTCLIENT_TICKET_HISTORY_FIELD_NONE;
+			ticket_history->old_value = NULL;
+			ticket_history->new_value = NULL;
+			ticket_history->data = NULL;
+
+			token = strtok_r(NULL, ":", &tokensaveptr);
+			ticket_history->description = malloc(strlen(token));
+			strcpy(ticket_history->description, ++token);
+
+			ticket_history->content = NULL;
+			ticket_history->creator = NULL;
+			ticket_history->created = NULL;
+			ticket_history->attachments = NULL;
+		}
+	} else {
+		free(*listptr);
+		*listptr = NULL;
+#ifdef DEBUG
+#ifdef ANDROID
+		__android_log_print(ANDROID_LOG_INFO, "librtclient"
+				, "%s response status:\n%s", __func__, line);
+#else
+		printf("%s response status:\n%s\n", __func__, line);
+#endif // ANDROID
+#endif // DEBUG
+	}
 
 	return realsize;
 }
