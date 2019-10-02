@@ -75,7 +75,7 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 				= list->histories[i];
 
 			token = strtok_r(line, ":", &tokensaveptr);
-			ticket_history->id = atoi(++token);
+			ticket_history->id = atoi(token);
 
 			ticket_history->ticket = 0;
 			ticket_history->time_taken = 0;
