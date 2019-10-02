@@ -36,6 +36,9 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 				} while ((uval /= 10));
 				length -= 2;
 				break;
+			case 'c':
+				length++;
+				break;
 			default:
 				break;
 		}
@@ -43,6 +46,7 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 	va_end(ap);
 
 	char url[length + 1];
+	length = 0;
 	strcpy(url, server_url);
 
 	va_start(ap, fmt);
@@ -53,10 +57,15 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 			case 's':
 				sval = va_arg(ap, char *);
 				strcat(url, sval);
+				length = strlen(url);
 				break;
 			case 'u':
 				uval = va_arg(ap, unsigned int);
 				sprintf(url, "%s%u", url, uval);
+				length = strlen(url);
+				break;
+			case 'c':
+				url[length++] = (char)va_arg(ap, int);
 				break;
 			default:
 				break;
