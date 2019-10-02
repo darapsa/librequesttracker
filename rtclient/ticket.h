@@ -10,18 +10,23 @@ struct rtclient_ticket {
 
 enum rtclient_ticket_history_type {
 	RTCLIENT_TICKET_HISTORY_TYPE_NONE = 0
+	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_LINK
+	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBER
+	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBERSHIP
+	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_REMINDER
+	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_WATCHER
+	, RTCLIENT_TICKET_HISTORY_TYPE_COMMENT
+	, RTCLIENT_TICKET_HISTORY_TYPE_COMMENT_EMAIL_RECORD
+	, RTCLIENT_TICKET_HISTORY_TYPE_CORRESPOND
 	, RTCLIENT_TICKET_HISTORY_TYPE_CREATE
+	, RTCLIENT_TICKET_HISTORY_TYPE_DEL_WATCHER
+	, RTCLIENT_TICKET_HISTORY_TYPE_DISABLED
 	, RTCLIENT_TICKET_HISTORY_TYPE_EMAIL_RECORD
+	, RTCLIENT_TICKET_HISTORY_TYPE_RESOLVE_REMINDER
 	, RTCLIENT_TICKET_HISTORY_TYPE_SET
 	, RTCLIENT_TICKET_HISTORY_TYPE_SET_WATCHER
 	, RTCLIENT_TICKET_HISTORY_TYPE_STATUS
-};
-
-enum rtclient_ticket_history_field {
-	RTCLIENT_TICKET_HISTORY_FIELD_NONE = 0
-	, RTCLIENT_TICKET_HISTORY_FIELD_PRIORITY
-	, RTCLIENT_TICKET_HISTORY_FIELD_STATUS
-	, RTCLIENT_TICKET_HISTORY_FIELD_OWNER
+	, RTCLIENT_TICKET_HISTORY_TYPE_SYSTEM_ERROR
 };
 
 struct rtclient_ticket_history_attachment {
@@ -30,12 +35,17 @@ struct rtclient_ticket_history_attachment {
 	size_t size;
 };
 
+struct rtclient_ticket_history_attachment_list {
+	size_t length;
+	struct rtclient_ticket_history_attachment *attachments[];
+};
+
 struct rtclient_ticket_history {
 	unsigned int id;
 	unsigned int ticket;
 	unsigned int time_taken;
 	enum rtclient_ticket_history_type type;
-	enum rtclient_ticket_history_field field;
+	char *field;
 	char *old_value;
 	char *new_value;
 	char *data;
@@ -43,10 +53,7 @@ struct rtclient_ticket_history {
 	char *content;
 	char *creator;
 	struct tm *created;
-	struct {
-		size_t length;
-		struct rtclient_ticket_history_attachment *attachments[];
-	} *attachments;
+	struct rtclient_ticket_history_attachment_list *attachments;
 };
 
 struct rtclient_ticket_history_list {
