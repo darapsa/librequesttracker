@@ -17,7 +17,7 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 {
 	va_list ap;
 	char *p, *sval;
-	unsigned int ival;
+	unsigned int uval;
 	size_t length = strlen(server_url) + strlen(fmt);
 
 	va_start(ap, fmt);
@@ -30,10 +30,10 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 				length += strlen(sval) - 2;
 				break;
 			case 'u':
-				ival = va_arg(ap, unsigned int);
+				uval = va_arg(ap, unsigned int);
 				do {
 					length++;
-				} while ((ival /= 10));
+				} while ((uval /= 10));
 				length -= 2;
 				break;
 			default:
@@ -55,8 +55,8 @@ inline void request(size_t (*writefunction)(void *, size_t, size_t, void *)
 				strcat(url, sval);
 				break;
 			case 'u':
-				ival = va_arg(ap, unsigned int);
-				sprintf(url, "%s%u", url, ival);
+				uval = va_arg(ap, unsigned int);
+				sprintf(url, "%s%u", url, uval);
 				break;
 			default:
 				break;
