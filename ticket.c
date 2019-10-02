@@ -233,8 +233,6 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 			}
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
-			strtok_r(line, ":", &tokensaveptr);
-			token = strtok_r(NULL, ":", &tokensaveptr);
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
 			strtok_r(line, ":", &tokensaveptr);
