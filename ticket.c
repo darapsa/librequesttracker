@@ -346,16 +346,14 @@ void rtclient_ticket_history(rtclient_ticket_history_list **listptr
 
 void rtclient_ticket_history_free(struct rtclient_ticket_history *history)
 {
-	if (history->attachments->length) {
-		for (size_t i = 0; i < history->attachments->length; i++) {
-			rtclient_ticket_history_attachment *attachment
-				= history->attachments->attachments[i];
-			if (attachment->file_name)
-				free(attachment->file_name);
-			free(attachment);
-		}
-		free(history->attachments);
+	for (size_t i = 0; i < history->attachments->length; i++) {
+		rtclient_ticket_history_attachment *attachment
+			= history->attachments->attachments[i];
+		if (attachment->file_name)
+			free(attachment->file_name);
+		free(attachment);
 	}
+	free(history->attachments);
 	free(history->created);
 	free(history->creator);
 	free(history->content);
@@ -366,6 +364,8 @@ void rtclient_ticket_history_free(struct rtclient_ticket_history *history)
 		free(history->new_value);
 	if (history->old_value)
 		free(history->old_value);
+	if (history->field)
+		free(history->field);
 	free(history);
 	history = NULL;
 }
