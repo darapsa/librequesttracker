@@ -78,7 +78,7 @@ extern "C" {
 			, const char *text);
 	void rtclient_ticket_history(struct rtclient_ticket_history_list **listptr
 			, unsigned int id
-			, enum rtclient_ticket_format format);
+			, enum rtclient_ticket_format result_format);
 	void rtclient_ticket_history_free
 		(struct rtclient_ticket_history *history);
 	void rtclient_ticket_history_list_free
