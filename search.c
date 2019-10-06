@@ -15,43 +15,42 @@ static size_t ticket_handler(void *contents, size_t size, size_t nmemb
 	response[realsize] = '\0';
 	char lines[strlen(response) + 1];
 	strcpy(lines, response);
-	rtclient_search_ticket_list **listptr
-		= (rtclient_search_ticket_list **)writedata;
-	rtclient_search_ticket_list *list = *listptr;
 
 	char *line = strtok(response, "\n");
 	if (strstr(line, "200 Ok")) {
 		line = strtok(NULL, "\n");
+		size_t length = 0;
 		do {
-			list->length++;
-			if (!strcmp(line, "No matching results.")) {
-				free(*listptr);
-				*listptr = NULL;
+			length++;
+			if (!strcmp(line, "No matching results."))
 				return realsize;
-			}
 		} while ((line = strtok(NULL, "\n")));
 
-		*listptr = realloc(list, sizeof(rtclient_search_ticket_list)
-				+ list->length * sizeof(rtclient_ticket));
-		list = *listptr;
+		rtclient_search_ticket_list **listptr
+			= (rtclient_search_ticket_list **)writedata;
+		*listptr = malloc(sizeof(rtclient_search_ticket_list)
+				+ length * sizeof(rtclient_ticket));
+		rtclient_search_ticket_list *list = *listptr;
+		list->length = length;
 
 		char *linesaveptr = NULL;
 		line = strtok_r(lines, "\n", &linesaveptr);
 		line = strtok_r(NULL, "\n", &linesaveptr);
-		char *tokensaveptr = NULL, *token = NULL;
-		for (size_t i = 0; i < list->length; i++) {
+		for (size_t i = 0; i < length; i++) {
 			list->tickets[i] = malloc(sizeof(rtclient_ticket));
 			rtclient_ticket *ticket = list->tickets[i]; 
-			token = strtok_r(line, ":", &tokensaveptr);
+
+			char *tokensaveptr = NULL;
+			char *token = strtok_r(line, ":", &tokensaveptr);
 			ticket->id = atoi(token);
+
 			token = strtok_r(NULL, ":", &tokensaveptr);
 			ticket->subject = malloc(strlen(token));
 			strcpy(ticket->subject, ++token);
+
 			line = strtok_r(NULL, "\n", &linesaveptr);
 		}
 	} else {
-		free(*listptr);
-		*listptr = NULL;
 #ifdef DEBUG
 #ifdef ANDROID
 		__android_log_print(ANDROID_LOG_INFO, "librtclient"
@@ -68,8 +67,6 @@ static size_t ticket_handler(void *contents, size_t size, size_t nmemb
 void rtclient_search_ticket(rtclient_search_ticket_list **listptr
 		, const char *query)
 {
-	*listptr = malloc(sizeof(rtclient_search_ticket_list));
-	(*listptr)->length = 0;
 	request(ticket_handler, (void *)listptr, NULL, "%s%s"
 			, "REST/1.0/search/ticket?query=", query);
 }
