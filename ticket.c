@@ -3,7 +3,6 @@
 #include "rtclient/ticket.h"
 
 typedef struct rtclient_ticket rtclient_ticket;
-typedef struct rtclient_ticket_history_attachment rtclient_ticket_history_attachment;
 typedef struct rtclient_ticket_history_list rtclient_ticket_history_list;
 typedef struct rtclient_ticket_history_attachment rtclient_ticket_history_attachment;
 typedef struct rtclient_ticket_history_attachment_list rtclient_ticket_history_attachment_list;
