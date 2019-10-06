@@ -17,12 +17,13 @@ static size_t ticket_handler(void *contents, size_t size, size_t nmemb
 	strcpy(lines, response);
 	rtclient_search_ticket_list **listptr
 		= (rtclient_search_ticket_list **)writedata;
+	rtclient_search_ticket_list *list = *listptr;
 
 	char *line = strtok(response, "\n");
 	if (strstr(line, "200 Ok")) {
 		line = strtok(NULL, "\n");
 		do {
-			(*listptr)->length++;
+			list->length++;
 			if (!strcmp(line, "No matching results.")) {
 				free(*listptr);
 				*listptr = NULL;
@@ -31,7 +32,7 @@ static size_t ticket_handler(void *contents, size_t size, size_t nmemb
 		} while ((line = strtok(NULL, "\n")));
 
 		*listptr = realloc(*listptr, sizeof(rtclient_search_ticket_list)
-				+ (*listptr)->length * sizeof(rtclient_ticket));
+				+ list->length * sizeof(rtclient_ticket));
 		rtclient_search_ticket_list *list = *listptr;
 
 		char *linesaveptr = NULL;
