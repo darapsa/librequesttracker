@@ -31,7 +31,7 @@ static size_t ticket_handler(void *contents, size_t size, size_t nmemb
 		} while ((line = strtok(NULL, "\n")));
 
 		rtclient_search_ticket_list *ptr = realloc(*listptr
-				, sizeof(*listptr)
+				, sizeof(rtclient_search_ticket_list)
 				+ (*listptr)->length * sizeof(rtclient_ticket));
 		*listptr = ptr;
 		rtclient_search_ticket_list *list = *listptr;
