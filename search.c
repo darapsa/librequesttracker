@@ -31,9 +31,9 @@ static size_t ticket_handler(void *contents, size_t size, size_t nmemb
 			}
 		} while ((line = strtok(NULL, "\n")));
 
-		*listptr = realloc(*listptr, sizeof(rtclient_search_ticket_list)
+		*listptr = realloc(list, sizeof(rtclient_search_ticket_list)
 				+ list->length * sizeof(rtclient_ticket));
-		rtclient_search_ticket_list *list = *listptr;
+		list = *listptr;
 
 		char *linesaveptr = NULL;
 		line = strtok_r(lines, "\n", &linesaveptr);
