@@ -62,24 +62,45 @@ static size_t show_handler(void *contents, size_t size, size_t nmemb
 	memcpy(response, contents, realsize);
 	response[realsize] = '\0';
 
-	rtclient_user **userptr = (rtclient_user **)writedata;
-	rtclient_user *user = *userptr;
-
 	char *linesaveptr = NULL;
 	char *line = strtok_r(response, "\n", &linesaveptr);
 	if (strstr(line, "200 Ok")) {
 		line = strtok_r(NULL, "\n", &linesaveptr);
-		char *tokensaveptr = NULL, *token = NULL;
+
+		rtclient_user **userptr = (rtclient_user **)writedata;
+		*userptr = malloc(sizeof(rtclient_user));
+		rtclient_user *user = *userptr;
+		user->password = NULL;
+		user->email_address = NULL;
+		user->real_name = NULL;
+		user->nick_name = NULL;
+		user->organization = NULL;
+		user->address1 = NULL;
+		user->address2 = NULL;
+		user->city = NULL;
+		user->state = NULL;
+		user->zip = NULL;
+		user->country = NULL;
+		user->home_phone = NULL;
+		user->work_phone = NULL;
+		user->mobile_phone = NULL;
+		user->pager_phone = NULL;
+		user->contact_info = NULL;
+		user->comments = NULL;
+		user->signature = NULL;
+		user->gecos = NULL;
+		user->lang = RTCLIENT_USER_LANG_NONE;
+		user->timezone = RTCLIENT_USER_TIMEZONE_NONE;
+		user->privileged = false;
+		user->disabled = true;
+
 		do {
-			token = strtok_r(line, ":", &tokensaveptr);
+			char *tokensaveptr = NULL;
+			char *token = strtok_r(line, ":", &tokensaveptr);
 			if (!strcmp(token, "id")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
 				token += 6;
 				user->id = atoi(token);
-			} else if (!strcmp(token, "Password")) {
-				token = strtok_r(NULL, ":", &tokensaveptr);
-				user->password = malloc(strlen(token));
-				strcpy(user->password, ++token);
 			} else if (!strcmp(token, "Name")) {
 				token = strtok_r(NULL, ":", &tokensaveptr);
 				user->name = malloc(strlen(token));
@@ -165,8 +186,6 @@ static size_t show_handler(void *contents, size_t size, size_t nmemb
 			}
 		} while ((line = strtok_r(NULL, "\n", &linesaveptr)));
 	} else {
-		free(*userptr);
-		*userptr = NULL;
 #ifdef DEBUG
 #ifdef ANDROID
 		__android_log_print(ANDROID_LOG_INFO, "librtclient"
@@ -180,93 +199,59 @@ static size_t show_handler(void *contents, size_t size, size_t nmemb
 	return realsize;
 }
 
-static inline void user_init(rtclient_user **userptr)
-{
-	*userptr = malloc(sizeof(rtclient_user));
-	rtclient_user *user = *userptr;
-	user->id = 0;
-	user->name = NULL;
-	user->password = NULL;
-	user->email_address = NULL;
-	user->real_name = NULL;
-	user->nick_name = NULL;
-	user->organization = NULL;
-	user->address1 = NULL;
-	user->address2 = NULL;
-	user->city = NULL;
-	user->state = NULL;
-	user->zip = NULL;
-	user->country = NULL;
-	user->home_phone = NULL;
-	user->work_phone = NULL;
-	user->mobile_phone = NULL;
-	user->pager_phone = NULL;
-	user->contact_info = NULL;
-	user->comments = NULL;
-	user->signature = NULL;
-	user->gecos = NULL;
-	user->lang = RTCLIENT_USER_LANG_NONE;
-	user->timezone = RTCLIENT_USER_TIMEZONE_NONE;
-	user->privileged = false;
-	user->disabled = true;
-}
-
 void rtclient_user_showid(rtclient_user **userptr, unsigned int id)
 {
-	user_init(userptr);
-	request(show_handler, (void *)userptr, NULL, "%s%u", "REST/1.0/user/"
-			, id);
+	request(show_handler, (void *)userptr, NULL, "%s%u", "REST/1.0/user/", id);
 }
 
 void rtclient_user_showname(rtclient_user **userptr, const char *name)
 {
-	user_init(userptr);
 	request(show_handler, (void *)userptr, NULL, "%s%s", "REST/1.0/user/"
 			, name);
 }
 
 void rtclient_user_free(rtclient_user *user)
 {
-	if (user->name)
-		free(user->name);
-	if (user->password)
-		free(user->password);
-	if (user->email_address)
-		free(user->email_address);
-	if (user->real_name)
-		free(user->real_name);
-	if (user->nick_name)
-		free(user->nick_name);
-	if (user->organization)
-		free(user->organization);
-	if (user->address1)
-		free(user->address1);
-	if (user->address2)
-		free(user->address2);
-	if (user->city)
-		free(user->city);
-	if (user->state)
-		free(user->state);
-	if (user->zip)
-		free(user->zip);
-	if (user->country)
-		free(user->country);
-	if (user->home_phone)
-		free(user->home_phone);
-	if (user->work_phone)
-		free(user->work_phone);
-	if (user->mobile_phone)
-		free(user->mobile_phone);
-	if (user->pager_phone)
-		free(user->pager_phone);
-	if (user->contact_info)
-		free(user->contact_info);
-	if (user->comments)
-		free(user->comments);
-	if (user->signature)
-		free(user->signature);
 	if (user->gecos)
 		free(user->gecos);
+	if (user->signature)
+		free(user->signature);
+	if (user->comments)
+		free(user->comments);
+	if (user->contact_info)
+		free(user->contact_info);
+	if (user->pager_phone)
+		free(user->pager_phone);
+	if (user->mobile_phone)
+		free(user->mobile_phone);
+	if (user->work_phone)
+		free(user->work_phone);
+	if (user->home_phone)
+		free(user->home_phone);
+	if (user->country)
+		free(user->country);
+	if (user->zip)
+		free(user->zip);
+	if (user->state)
+		free(user->state);
+	if (user->city)
+		free(user->city);
+	if (user->address2)
+		free(user->address2);
+	if (user->address1)
+		free(user->address1);
+	if (user->organization)
+		free(user->organization);
+	if (user->nick_name)
+		free(user->nick_name);
+	if (user->real_name)
+		free(user->real_name);
+	if (user->email_address)
+		free(user->email_address);
+	if (user->password)
+		free(user->password);
+	if (user->name)
+		free(user->name);
 	free(user);
 	user = NULL;
 }
