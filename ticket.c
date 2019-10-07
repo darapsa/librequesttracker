@@ -262,7 +262,7 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 					= realloc(ticket_history->attachments
 							, sizeof
 							(attachment_list)
-							+ i + 1
+							+ (i + 1)
 							* sizeof
 							(history_attachment));
 				attachment_list *list = ticket_history->attachments;
