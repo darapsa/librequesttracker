@@ -16,6 +16,7 @@ config.log
 config.status
 configure
 depcomp
+html
 install-sh
 missing
 rtclienttest
