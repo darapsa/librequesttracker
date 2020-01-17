@@ -1,4 +1,4 @@
-# C Library for accessing [Request Tracker's REST 1.0](https://rt-wiki.bestpractical.com/wiki/REST) interface
+# C library for accessing [Request Tracker's REST 1.0](https://rt-wiki.bestpractical.com/wiki/REST) interface
 
 # Building
 
