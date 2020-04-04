@@ -7,6 +7,7 @@
 ```sh
 $ git clone git://darapsa.org/librtclient.git
 $ cd librtclient
+$ libtoolize
 $ autoreconf --install
 ```
 
@@ -26,19 +27,20 @@ $ ./configure
 or
 
 ```sh
-$ CC=/usr/local/aarch64-linux-android/bin/aarch64-linux-android-clang ./configure --host=aarch64-linux-android
+$ CC=/usr/local/aarch64-linux-android/bin/aarch64-linux-android-clang RANLIB=/usr/local/aarch64-linux-android/bin/aarch64-linux-android-ranlib ./configure --host=aarch64-linux-android --prefix=/usr/local/aarch64-linux-android/sysroot/usr
 ```
 
 or
 
 ```sh
-$ CC=/usr/local/arm-linux-androideabi/bin/arm-linux-androideabi-clang ./configure --host=arm-linux-androideabi
+$ CC=/usr/local/arm-linux-androideabi/bin/arm-linux-androideabi-clang RANLIB=/usr/local/arm-linux-androideabi/bin/arm-linux-androideabi-ranlib ./configure --host=arm-linux-androideabi --prefix=/usr/local/arm-linux-androideabi/sysroot/usr
 ```
 
 or so on.
 
-## Compiling and linking
+## Compiling, linking, and installing
 
 ```sh
 $ make # -jN (with N an integer number of parallel tasks you allow your computer to run for compiling this)
+$ sudo make install
 ```
