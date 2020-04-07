@@ -16,6 +16,8 @@ pkginclude_HEADERS = \
 		     rtclient/search.h \
 		     rtclient/client.h
 
+librtclient_la_LDFLAGS = -lcurl
+
 #bin_PROGRAMS = rtclienttest
 #rtclienttest_SOURCES = main.c
 #rtclienttest_LDADD = librtclient.la
