@@ -14,8 +14,58 @@ $ autoreconf --install
 ## Optionally setting environment values
 
 ```sh
-$ export CFLAGS="${CFLAGS} -g -DDEBUG -DANDROID -fPIC" # PIC might be needed later on android_armv7
-$ export LDFLAGS="${LDFLAGS} -llog" # Android liblog
+$ export CPPFLAGS="${CPPFLAGS} -DDEBUG -DANDROID"
+$ export CFLAGS="${CFLAGS} -g"
+$ export NDK=/opt/android-ndk-r21
+$ export TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64
+```
+
+and then
+
+```sh
+$ export TARGET=aarch64-linux-android
+```
+
+or
+
+```sh
+$ export TARGET=armv7a-linux-androideabi
+```
+
+or
+
+```sh
+$ export TARGET=i686-linux-android
+```
+
+or
+
+```sh
+$ export TARGET=x86_64-linux-android
+```
+
+and then
+
+```sh
+$ export API=21
+$ export CC=$TOOLCHAIN/bin/$TARGET$API-clang
+```
+
+and only for Android 32-bit ARM, reset TARGET
+
+```sh
+$ export TARGET=arm-linux-androideabi
+```
+
+and then
+
+```sh
+$ export AR=$TOOLCHAIN/bin/$TARGET-ar
+$ export AS=$TOOLCHAIN/bin/$TARGET-as
+$ export LD=$TOOLCHAIN/bin/$TARGET-ld
+$ export RANLIB=$TOOLCHAIN/bin/$TARGET-ranlib
+$ export STRIP=$TOOLCHAIN/bin/$TARGET-strip
+$ export PREFIX=$TOOLCHAIN/sysroot/usr
 ```
 
 ## Configuring for various target hosts
@@ -27,25 +77,7 @@ $ ./configure
 or
 
 ```sh
-$ CC=/usr/local/aarch64-linux-android/bin/aarch64-linux-android-clang RANLIB=/usr/local/aarch64-linux-android/bin/aarch64-linux-android-ranlib ./configure --host=aarch64-linux-android --prefix=/usr/local/aarch64-linux-android/sysroot/usr
-```
-
-or
-
-```sh
-$ CC=/usr/local/arm-linux-androideabi/bin/arm-linux-androideabi-clang RANLIB=/usr/local/arm-linux-androideabi/bin/arm-linux-androideabi-ranlib ./configure --host=arm-linux-androideabi --prefix=/usr/local/arm-linux-androideabi/sysroot/usr
-```
-
-or
-
-```sh
-$ CC=/usr/local/i686-linux-androideabi/bin/i686-linux-androideabi-clang RANLIB=/usr/local/i686-linux-androideabi/bin/i686-linux-androideabi-ranlib ./configure --host=i686-linux-androideabi --prefix=/usr/local/i686-linux-androideabi/sysroot/usr
-```
-
-or
-
-```sh
-$ CC=/usr/local/x86_64-linux-androideabi/bin/x86_64-linux-androideabi-clang RANLIB=/usr/local/x86_64-linux-androideabi/bin/x86_64-linux-androideabi-ranlib ./configure --host=x86_64-linux-androideabi --prefix=/usr/local/x86_64-linux-androideabi/sysroot/usr
+$ ./configure --host=$TARGET --prefix=$PREFIX --libdir=$PREFIX/lib/$TARGET/$API --disable-static
 ```
 
 or so on.
