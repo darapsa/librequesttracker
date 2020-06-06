@@ -14,9 +14,7 @@ $ autoreconf --install
 ## Optionally setting environment values
 
 ```sh
-$ export CPPFLAGS="${CPPFLAGS} -DDEBUG -DANDROID"
-$ export CFLAGS="${CFLAGS} -g"
-$ export NDK=/opt/android-ndk-r21
+$ export NDK=/opt/android-ndk-r19
 $ export TOOLCHAIN=$NDK/toolchains/llvm/prebuilt/linux-x86_64
 ```
 
@@ -66,6 +64,17 @@ $ export LD=$TOOLCHAIN/bin/$TARGET-ld
 $ export RANLIB=$TOOLCHAIN/bin/$TARGET-ranlib
 $ export STRIP=$TOOLCHAIN/bin/$TARGET-strip
 $ export PREFIX=$TOOLCHAIN/sysroot/usr
+```
+
+If debugging for Android:
+```sh
+$ export CPPFLAGS="$CPPFLAGS -DDEBUG -DANDROID"
+$ export CFLAGS="$CFLAGS -g"
+```
+
+If, for example, on FreeBSD and cross-compiling for arm64 Android relying on Linux binary compatibility:
+```sh
+$ setenv LDFLAGS "$LDFLAGS -L$PREFIX/lib/$TARGET/$API"
 ```
 
 ## Configuring for various target hosts
