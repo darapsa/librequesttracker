@@ -1,4 +1,3 @@
-ACLOCAL_AMFLAGS = -I m4
 lib_LTLIBRARIES = librtclient.la
 librtclient_la_SOURCES = \
 			request.h \
@@ -9,15 +8,13 @@ librtclient_la_SOURCES = \
 			ticket.c \
 			search.c \
 			client.c
-
+librtclient_la_CPPFLAGS = -I${prefix}/include
+librtclient_la_LDFLAGS = -L${prefix}/lib -lcurl
 pkginclude_HEADERS = \
 		     rtclient/user.h \
 		     rtclient/ticket.h \
 		     rtclient/search.h \
 		     rtclient/client.h
-
-librtclient_la_LDFLAGS = -lcurl
-
 #bin_PROGRAMS = rtclienttest
 #rtclienttest_SOURCES = main.c
 #rtclienttest_LDADD = librtclient.la
