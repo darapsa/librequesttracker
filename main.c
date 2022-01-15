@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <rtclient/client.h>
+#include <rtclient.h>
 #include <rtclient/user.h>
 #include <rtclient/ticket.h>
 #include <rtclient/search.h>

@@ -1,5 +1,5 @@
-#ifndef RTCLIENT_CLIENT_H
-#define RTCLIENT_CLIENT_H
+#ifndef RTCLIENT_H
+#define RTCLIENT_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -13,4 +13,4 @@ extern "C" {
 }
 #endif
 
-#endif // RTCLIENT_CLIENT_H
+#endif

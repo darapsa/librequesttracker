@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "request.h"
-#include "rtclient/client.h"
+#include "rtclient.h"
 
 CURL *curl = NULL;
 char *server_url = NULL;

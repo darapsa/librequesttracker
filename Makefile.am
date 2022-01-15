@@ -10,11 +10,11 @@ librtclient_la_SOURCES = \
 			client.c
 librtclient_la_CPPFLAGS = -I${prefix}/include
 librtclient_la_LDFLAGS = -L${prefix}/lib -lcurl
+include_HEADERS = rtclient.h
 pkginclude_HEADERS = \
 		     rtclient/user.h \
 		     rtclient/ticket.h \
-		     rtclient/search.h \
-		     rtclient/client.h
+		     rtclient/search.h
 #bin_PROGRAMS = rtclienttest
 #rtclienttest_SOURCES = main.c
 #rtclienttest_LDADD = librtclient.la
