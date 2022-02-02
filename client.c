@@ -46,8 +46,6 @@ void rtclient_login(const char *name, const char *password,
 void rtclient_free_response(rtclient_response *response)
 {
 #ifdef __EMSCRIPTEN__
-	if (response->userData)
-		free(response->userData);
 	emscripten_fetch_close(response);
 #else
 	free(response->data);
