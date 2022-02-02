@@ -8,20 +8,20 @@ typedef struct rtclient_ticket_history_list history_list;
 typedef struct rtclient_ticket_history_attachment history_attachment;
 typedef struct rtclient_ticket_history_attachment_list attachment_list;
 
-void rtclient_ticket_new(const char *queue
-			, const char *requestor
-			, const char *subject
-			, const char *cc
-			, const char *admin_cc
-			, const char *owner
-			, const char *status
-			, const char *priority
-			, const char *initial_priority
-			, const char *final_priority
-			, const char *time_estimated
-			, const char *starts
-			, const char *due
-			, const char *text)
+void rtclient_ticket_new(const char *queue,
+		const char *requestor,
+		const char *subject,
+		const char *cc,
+		const char *admin_cc,
+		const char *owner,
+		const char *status,
+		const char *priority,
+		const char *initial_priority,
+		const char *final_priority,
+		const char *time_estimated,
+		const char *starts,
+		const char *due,
+		const char *text)
 {
 	post("REST/1.0/ticket/new", (const char *[]){
 			"ticket/new", "id"
