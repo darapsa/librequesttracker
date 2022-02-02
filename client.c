@@ -1,57 +1,68 @@
-#include <stdbool.h>
 #include <stdlib.h>
+#include <string.h>
 #include "request.h"
 #include "rtclient.h"
 
-CURL *curl = NULL;
+#ifdef __EMSCRIPTEN__
+emscripten_fetch_attr_t attr;
+#else
 char *server_url = NULL;
-
-bool rtclient_init(const char *url, const char *certificate)
-{
-	curl_global_init(CURL_GLOBAL_SSL);
-	curl = curl_easy_init();
-	if (curl) {
-		curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
-		curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "");
-		curl_easy_setopt(curl, CURLOPT_REFERER, url);
-		if (certificate)
-			curl_easy_setopt(curl, CURLOPT_CAINFO, certificate);
-#ifdef DEBUG
-		curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+char *cookies_path = NULL;
+char *cainfo = NULL;
 #endif
-		size_t length = strlen(url);
-		bool append = !(bool)(url[length - 1] == '/');
-		server_url = malloc(length + (size_t)append + 1);
-		strcpy(server_url, url);
-		if (append)
-			strcat(server_url, "/");
-	}
 
-	return (bool)curl;
+void rtclient_init(const char *url, const char *cookies,
+		const char *certificate)
+{
+#ifdef __EMSCRIPTEN__
+	emscripten_fetch_attr_init(&attr);
+	attr.attributes = EMSCRIPTEN_FETCH_LOAD_TO_MEMORY;
+#else
+	size_t length = strlen(url);
+	size_t append = url[length - 1] != '/';
+	server_url = malloc(length + append + 1);
+	strcpy(server_url, url);
+	if (append)
+		strcat(server_url, "/");
+	cookies_path = malloc(strlen(cookies) + 1);
+	strcpy(cookies_path, cookies);
+	curl_global_init(CURL_GLOBAL_SSL);
+	if (certificate) {
+		cainfo = malloc(strlen(certificate) + 1);
+		strcpy(cainfo, certificate);
+	}
+#endif
 }
 
-void rtclient_login(const char *name, const char *password)
+void rtclient_login(const char *name, const char *password,
+		void (*handler)(rtclient_response *))
 {
-	struct curl_httppost *post, *last = NULL;
-	curl_formadd(&post, &last
-			, CURLFORM_COPYNAME, "user"
-			, CURLFORM_PTRCONTENTS, name
-			, CURLFORM_END);
-	curl_formadd(&post, &last
-			, CURLFORM_COPYNAME, "pass"
-			, CURLFORM_PTRCONTENTS, password
-			, CURLFORM_END);
-	last = NULL;
-	request(NULL, NULL, post, "");
-	curl_formfree(post);
-	post = NULL;
+	request(handler, NULL, &(struct body){ 2, {
+			{ "user", name },
+			{ "pass", password }
+		}}, "");
+}
+
+void rtclient_free_response(rtclient_response *response)
+{
+#ifdef __EMSCRIPTEN__
+	if (response->userData)
+		free(response->userData);
+	emscripten_fetch_close(response);
+#else
+	free(response->data);
+	curl_easy_cleanup(response->curl);
+	free(response);
+#endif
 }
 
 void rtclient_cleanup()
 {
-	if (curl) {
-		free(server_url);
-		curl_easy_cleanup(curl);
-	}
+#ifndef __EMSCRIPTEN__
+	if (cainfo)
+		free(cainfo);
+	free(cookies_path);
+	free(server_url);
 	curl_global_cleanup();
+#endif
 }

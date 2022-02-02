@@ -1,6 +1,8 @@
 #ifndef RTCLIENT_USER_H
 #define RTCLIENT_USER_H
 
+#include "typedefs.h"
+
 enum rtclient_user_lang {
 	RTCLIENT_USER_LANG_NONE = 0,
 	RTCLIENT_USER_LANG_AR,
@@ -464,9 +466,9 @@ void rtclient_user_new(const char *name,
 		enum rtclient_user_timezone timezone,
 		bool disabled,
 		bool privileged);
-	void rtclient_user_showid(struct rtclient_user **userptr, unsigned int id);
-	void rtclient_user_showname(struct rtclient_user **userptr, const char *name);
-	void rtclient_user_free(struct rtclient_user *user);
+void rtclient_user_showid(unsigned int id, void (*)(struct rtclient_user *));
+void rtclient_user_showname(const char *name, void (*)(struct rtclient_user *));
+void rtclient_user_free(struct rtclient_user *user);
 
 #ifdef __cplusplus
 }

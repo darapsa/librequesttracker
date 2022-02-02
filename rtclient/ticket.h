@@ -56,11 +56,6 @@ struct rtclient_ticket_history {
 	struct rtclient_ticket_history_attachment_list *attachments;
 };
 
-struct rtclient_ticket_history_list {
-	size_t length;
-	struct rtclient_ticket_history *histories[];
-};
-
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -79,12 +74,9 @@ void rtclient_ticket_new(const char *queue,
 		const char *starts,
 		const char *due,
 		const char *text);
-	void rtclient_ticket_history(struct rtclient_ticket_history_list **listptr
-			, unsigned int id, bool long_format);
-	void rtclient_ticket_history_free
-		(struct rtclient_ticket_history *history);
-	void rtclient_ticket_history_list_free
-		(struct rtclient_ticket_history_list *list);
+void rtclient_ticket_history_list(unsigned int id, bool long_format,
+		void (*callback)(struct rtclient_ticket_history **));
+void rtclient_ticket_history_free(struct rtclient_ticket_history *history);
 
 #ifdef __cplusplus
 }

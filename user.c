@@ -6,11 +6,11 @@
 #endif
 #endif
 #include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
-#include "post.h"
+#include "request.h"
+#include "rtclient.h"
 #include "rtclient/user.h"
-
-typedef struct rtclient_user rtclient_user;
 
 void rtclient_user_new(const char *name,
 		const char *password,
@@ -37,46 +37,40 @@ void rtclient_user_new(const char *name,
 		bool disabled,
 		bool privileged)
 {
-	post("REST/1.0/user/new", (const char *[]){
-			name, "Name"
-			, password, "Password"
-			, email_address, "EmailAddress"
-			, real_name, "RealName"
-			, nick_name, "NickName"
-			, organization, "Organization"
-			, address1, "Address1"
-			, address2, "Address2"
-			, city, "City"
-			, state, "State"
-			, zip, "Zip"
-			, country, "Country"
-			, home_phone, "HomePhone"
-			, work_phone, "WorkPhone"
-			, mobile_phone, "MobilePhone"
-			, pager_phone, "PagerPhone"
-			, contact_info, "ContactInfo"
-			, comments, "Comments"
-			, signature, "Signature"
-			, gecos, "Gecos"
-	}, 40);
+	request(NULL, NULL, &(struct body){ 20, {
+			{ "Name", name },
+			{ "Password", password },
+			{ "EmailAddress", email_address },
+			{ "RealName", real_name },
+			{ "NickName", nick_name },
+			{ "Organization", organization },
+			{ "Address1", address1 },
+			{ "Address2", address2 },
+			{ "City", city },
+			{ "State", state },
+			{ "Zip", zip },
+			{ "Country", country },
+			{ "HomePhone", home_phone },
+			{ "WorkPhone", work_phone },
+			{ "MobilePhone", mobile_phone },
+			{ "PagerPhone", pager_phone },
+			{ "ContactInfo", contact_info },
+			{ "Comments", comments },
+			{ "Signature", signature },
+			{ "Gecos", gecos }
+	}}, "%s", "REST/1.0/user/new");
 }
 
-static size_t show_handler(void *contents, size_t size, size_t nmemb
-		, void *writedata)
+static void handle_show(rtclient_response *response)
 {
-	size_t realsize = size * nmemb;
-	char response[realsize + 1];
-	memcpy(response, contents, realsize);
-	response[realsize] = '\0';
+	char data[response->numBytes];
+	strcpy(data, response->data);
 
 	char *linesaveptr = NULL;
-	char *line = strtok_r(response, "\n", &linesaveptr);
+	char *line = strtok_r(data, "\n", &linesaveptr);
 	if (strstr(line, "200 Ok")) {
 		line = strtok_r(NULL, "\n", &linesaveptr);
-
-		rtclient_user **userptr = (rtclient_user **)writedata;
-		*userptr = malloc(sizeof(rtclient_user));
-		rtclient_user *user = *userptr;
+		struct rtclient_user *user = malloc(sizeof(struct rtclient_user));
 		user->password = NULL;
 		user->email_address = NULL;
 		user->real_name = NULL;
@@ -100,7 +94,6 @@ static size_t show_handler(void *contents, size_t size, size_t nmemb
 		user->timezone = RTCLIENT_USER_TIMEZONE_NONE;
 		user->privileged = false;
 		user->disabled = true;
-
 		do {
 			char *tokensaveptr = NULL;
 			char *token = strtok_r(line, ":", &tokensaveptr);
@@ -192,6 +185,7 @@ static size_t show_handler(void *contents, size_t size, size_t nmemb
 				user->disabled = (bool)atoi(++token);
 			}
 		} while ((line = strtok_r(NULL, "\n", &linesaveptr)));
+		((void (*)(struct rtclient_user *))response->userData)(user);
 	} else {
 #ifdef DEBUG
 #ifdef __ANDROID__
@@ -202,22 +196,20 @@ static size_t show_handler(void *contents, size_t size, size_t nmemb
 #endif
 #endif
 	}
-
-	return realsize;
+	rtclient_free_response(response);
 }
 
-void rtclient_user_showid(rtclient_user **userptr, unsigned int id)
+void rtclient_user_showid(unsigned int id, void (*callback)(struct rtclient_user *))
 {
-	request(show_handler, (void *)userptr, NULL, "%s%u", "REST/1.0/user/", id);
+	request(handle_show, (void (*)(void *))callback, NULL, "%s%u", "REST/1.0/user/", id);
 }
 
-void rtclient_user_showname(rtclient_user **userptr, const char *name)
+void rtclient_user_showname(const char *name, void (*callback)(struct rtclient_user *))
 {
-	request(show_handler, (void *)userptr, NULL, "%s%s", "REST/1.0/user/"
-			, name);
+	request(handle_show, (void (*)(void *))callback, NULL, "%s%s", "REST/1.0/user/", name);
 }
 
-void rtclient_user_free(rtclient_user *user)
+void rtclient_user_free(struct rtclient_user *user)
 {
 	if (user->gecos)
 		free(user->gecos);

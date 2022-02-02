@@ -1,13 +1,15 @@
 #if defined __ANDROID__ && defined DEBUG
 #include <android/log.h>
 #endif
+#include <stdio.h>
 #include <stdlib.h>
-#include "post.h"
+#include <string.h>
+#include <time.h>
+#include "request.h"
+#include "rtclient.h"
 #include "rtclient/ticket.h"
 
 typedef struct rtclient_ticket rtclient_ticket;
-typedef struct rtclient_ticket_history ticket_history;
-typedef struct rtclient_ticket_history_list history_list;
 typedef struct rtclient_ticket_history_attachment history_attachment;
 typedef struct rtclient_ticket_history_attachment_list attachment_list;
 
@@ -26,50 +28,45 @@ void rtclient_ticket_new(const char *queue,
 		const char *due,
 		const char *text)
 {
-	post("REST/1.0/ticket/new", (const char *[]){
-			"ticket/new", "id"
-			, queue, "Queue"
-			, requestor, "Requestor"
-			, subject, "Subject"
-			, cc, "Cc"
-			, admin_cc, "AdminCc"
-			, owner, "Owner"
-			, status, "Status"
-			, priority, "Priority"
-			, initial_priority, "InitialPriority"
-			, final_priority, "FinalPriority"
-			, time_estimated, "TimeEstimated"
-			, starts, "Starts"
-			, due, "Due"
-			, text, "Text"
-			}, 28);
+	request(NULL, NULL, &(struct body){ 15, {
+			{ "id", "ticket/new" },
+			{ "Queue", queue },
+			{ "Requestor", requestor },
+			{ "Subject", subject },
+			{ "Cc", cc },
+			{ "AdminCc", admin_cc },
+			{ "Owner", owner },
+			{ "Status", status },
+			{ "Priority", priority },
+			{ "InitialPriority", initial_priority },
+			{ "FinalPriority", final_priority },
+			{ "TimeEstimated", time_estimated },
+			{ "Starts", starts },
+			{ "Due", due },
+			{ "Text", text }
+		}}, "%s", "REST/1.0/ticket/new");
 }
 
-static size_t history_handler(void *contents, size_t size, size_t nmemb
-		, void *writedata)
+static void handle_history(rtclient_response *response)
 {
-	size_t realsize = size * nmemb;
-	char response[realsize + 1];
-	memcpy(response, contents, realsize);
-	response[realsize] = '\0';
+	char data[response->numBytes];
+	strcpy(data, response->data);
 
 	char *linesaveptr = NULL;
-	char *line = strtok_r(response, "\n", &linesaveptr);
+	char *line = strtok_r(data, "\n", &linesaveptr);
 	if (strstr(line, "200 Ok")) {
 
 		line = strtok_r(NULL, "\n", &linesaveptr);
 		char *lengthstr = strtok(line, "/");
 		size_t length = atoi(&lengthstr[2]);
-		history_list **listptr = (history_list **)writedata;
-		*listptr = malloc(sizeof(history_list)
-				+ length * sizeof(ticket_history));
-		history_list *list = *listptr;
-		list->length = length;
+		struct rtclient_ticket_history **list
+			= malloc(sizeof(struct rtclient_ticket_history *)
+					* (length + 1));
 
 		for (size_t i = 0; i < length; i++) {
 			line = strtok_r(NULL, "\n", &linesaveptr);
-			list->histories[i] = malloc(sizeof(ticket_history));
-			ticket_history *ticket_history = list->histories[i];
+			list[i] = malloc(sizeof(struct rtclient_ticket_history));
+			struct rtclient_ticket_history *ticket_history = list[i];
 
 			char *tokensaveptr = NULL;
 			char *token = strtok_r(line, ":", &tokensaveptr);
@@ -94,6 +91,8 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 				= malloc(sizeof(attachment_list));
 			ticket_history->attachments->length = 0;
 		}
+		list[length] = NULL;
+		((void (*)(struct rtclient_ticket_history **))response->userData)(list);
 	} else {
 #ifdef DEBUG
 #ifdef __ANDROID__
@@ -104,33 +103,40 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 #endif
 #endif
 	}
-
-	return realsize;
+	rtclient_free_response(response);
 }
 
-static size_t history_l_handler(void *contents, size_t size, size_t nmemb
-		, void *writedata)
+static void handle_history_l(rtclient_response *response)
 {
-	size_t realsize = size * nmemb;
-	char response[realsize + 1];
-	memcpy(response, contents, realsize);
-	response[realsize] = '\0';
+	char data[response->numBytes];
+	strcpy(data, response->data);
 
 	char *linesaveptr = NULL;
-	char *line = strtok_r(response, "\n", &linesaveptr);
+	char *line = strtok_r(data, "\n", &linesaveptr);
 	if (strstr(line, "200 Ok")) {
-		history_list **listptr = (history_list **)writedata;
-		history_list *list = *listptr;
 
-		for (size_t i = 0; i < list->length; i++) {
-			ticket_history *ticket_history = list->histories[i];
-			strtok_r(NULL, "\n", &linesaveptr);
-			line = strtok_r(NULL, "\n", &linesaveptr);
-			line = strtok_r(NULL, "\n", &linesaveptr);
+		line = strtok_r(NULL, "\n", &linesaveptr);
+		char *tokensaveptr = NULL;
+		strtok_r(line, "/", &tokensaveptr);
+		size_t length = atoi(strtok_r(NULL, "(", &tokensaveptr));
+		struct rtclient_ticket_history **list
+			= malloc(sizeof(struct rtclient_ticket_history *)
+					* (length + 1));
 
-			char *tokensaveptr = NULL;
+		for (size_t i = 0; i < length; i++) {
+			line = strtok_r(NULL, "\n", &linesaveptr);
+			if (i)
+				line = strtok_r(NULL, "\n", &linesaveptr);
+			list[i] = malloc(sizeof(struct rtclient_ticket_history));
+			struct rtclient_ticket_history *ticket_history = list[i];
+
 			strtok_r(line, ":", &tokensaveptr);
 			char *token = strtok_r(NULL, ":", &tokensaveptr);
+			ticket_history->id = atoi(++token);
+			line = strtok_r(NULL, "\n", &linesaveptr);
+
+			strtok_r(line, ":", &tokensaveptr);
+			token = strtok_r(NULL, ":", &tokensaveptr);
 			ticket_history->ticket = atoi(++token);
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
@@ -141,42 +147,60 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 
 			strtok_r(line, ":", &tokensaveptr);
 			token = strtok_r(NULL, ":", &tokensaveptr);
-			enum rtclient_ticket_history_type type
-				= ticket_history->type;
 			if (!strcmp(++token, "AddLink"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_ADD_LINK;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_ADD_LINK;
 			else if (!strcmp(token, "AddMember"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBER;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBER;
 			else if (!strcmp(token, "AddMembership"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBERSHIP;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBERSHIP;
 			else if (!strcmp(token, "AddReminder"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_ADD_REMINDER;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_ADD_REMINDER;
 			else if (!strcmp(token, "AddWatcher"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_ADD_WATCHER;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_ADD_WATCHER;
 			else if (!strcmp(token, "Comment"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_COMMENT;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_COMMENT;
 			else if (!strcmp(token, "CommentEmailRecord"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_COMMENT_EMAIL_RECORD;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_COMMENT_EMAIL_RECORD;
 			else if (!strcmp(token, "Correspond"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_CORRESPOND;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_CORRESPOND;
 			else if (!strcmp(token, "Create"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_CREATE;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_CREATE;
 			else if (!strcmp(token, "DelWatcher"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_DEL_WATCHER;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_DEL_WATCHER;
 			else if (!strcmp(token, "Disabled"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_DISABLED;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_DISABLED;
 			else if (!strcmp(token, "EmailRecord"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_EMAIL_RECORD;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_EMAIL_RECORD;
 			else if (!strcmp(token, "ResolveReminder"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_RESOLVE_REMINDER;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_RESOLVE_REMINDER;
 			else if (!strcmp(token, "Set"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_SET;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_SET;
 			else if (!strcmp(token, "SetWatcher"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_SET_WATCHER;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_SET_WATCHER;
 			else if (!strcmp(token, "Status"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_STATUS;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_STATUS;
 			else if (!strcmp(token, "SystemError"))
-				type = RTCLIENT_TICKET_HISTORY_TYPE_SYSTEM_ERROR;
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_SYSTEM_ERROR;
+			else
+				ticket_history->type
+					= RTCLIENT_TICKET_HISTORY_TYPE_NONE;
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
 			strtok_r(line, ":", &tokensaveptr);
@@ -184,23 +208,28 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 			if (token && strcmp(token, "")) {
 				ticket_history->field = malloc(strlen(token));
 				strcpy(ticket_history->field, ++token);
-			}
+			} else
+				ticket_history->field = NULL;
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
 			strtok_r(line, ":", &tokensaveptr);
 			token = strtok_r(NULL, ":", &tokensaveptr);
 			if (token && strcmp(token, "")) {
-				ticket_history->old_value = malloc(strlen(token));
+				ticket_history->old_value
+					= malloc(strlen(token));
 				strcpy(ticket_history->old_value, ++token);
-			}
+			} else
+				ticket_history->old_value = NULL;
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
 			strtok_r(line, ":", &tokensaveptr);
 			token = strtok_r(NULL, ":", &tokensaveptr);
 			if (token && strcmp(token, "")) {
-				ticket_history->new_value = malloc(strlen(token));
+				ticket_history->new_value
+					= malloc(strlen(token));
 				strcpy(ticket_history->new_value, ++token);
-			}
+			} else
+				ticket_history->new_value = NULL;
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
 			strtok_r(line, ":", &tokensaveptr);
@@ -208,9 +237,18 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 			if (token && strcmp(token, "")) {
 				ticket_history->data = malloc(strlen(token));
 				strcpy(ticket_history->data, ++token);
-			}
+			} else
+				ticket_history->data = NULL;
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
+			strtok_r(line, ":", &tokensaveptr);
+			token = strtok_r(NULL, ":", &tokensaveptr);
+			if (token && strcmp(token, "")) {
+				ticket_history->description
+					= malloc(strlen(token));
+				strcpy(ticket_history->description, ++token);
+			} else
+				ticket_history->description = NULL;
 			line = strtok_r(NULL, "\n", &linesaveptr);
 
 			strtok_r(line, ":", &tokensaveptr);
@@ -220,9 +258,9 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 			strcpy(content, ++token);
 			line = strtok_r(NULL, "\n", &linesaveptr);
 			while (strncmp(line, "Creator", 7)) {
-				ticket_history->content = realloc(content
-						, strlen(content)
-						+ strlen(line) + 2);
+				ticket_history->content = realloc(content,
+						strlen(content) + strlen(line)
+						+ 2);
 				content = ticket_history->content;
 				sprintf(content, "%s\n%s", content, line);
 				line = strtok_r(NULL, "\n", &linesaveptr);
@@ -259,16 +297,19 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 			if (!token)
 				break;
 
+			ticket_history->attachments
+				= malloc(sizeof(attachment_list));
+			ticket_history->attachments->length = 0;
 			size_t i = 0;
 			while (strcmp(line, "--")) {
 				ticket_history->attachments
-					= realloc(ticket_history->attachments
-							, sizeof
-							(attachment_list)
+					= realloc(ticket_history->attachments,
+							sizeof(attachment_list)
 							+ (i + 1)
 							* sizeof
 							(history_attachment));
-				attachment_list *list = ticket_history->attachments;
+				attachment_list *list
+					= ticket_history->attachments;
 				list->length++;
 				list->attachments[i]
 					= malloc(sizeof(history_attachment));
@@ -296,6 +337,9 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 				token = strtok_r(line, ": ()", &tokensaveptr);
 			}
 		}
+		list[length] = NULL;
+		((void (*)(struct rtclient_ticket_history **))
+		 response->userData)(list);
 	} else {
 #ifdef DEBUG
 #ifdef __ANDROID__
@@ -306,21 +350,22 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 #endif
 #endif
 	}
-
-	return realsize;
+	rtclient_free_response(response);
 }
 
-void rtclient_ticket_history(history_list **listptr
-		, unsigned int id, bool long_format)
+void rtclient_ticket_history_list(unsigned int id, bool long_format,
+		void (*callback)(struct rtclient_ticket_history **))
 {
-	request(history_handler, (void *)listptr, NULL, "%s%u%s"
-			, "REST/1.0/ticket/", id, "/history");
 	if (long_format)
-		request(history_l_handler, (void *)listptr, NULL, "%s%u%s"
-				, "REST/1.0/ticket/", id, "/history?format=l");
+		request(handle_history_l, (void (*)(void *))callback, NULL,
+				"%s%u%s", "REST/1.0/ticket/", id,
+				"/history?format=l");
+	else
+		request(handle_history, (void (*)(void *))callback, NULL,
+				"%s%u%s", "REST/1.0/ticket/", id, "/history");
 }
 
-void rtclient_ticket_history_free(ticket_history *history)
+void rtclient_ticket_history_free(struct rtclient_ticket_history *history)
 {
 	attachment_list *list = history->attachments;
 	for (size_t i = 0; i < list->length; i++) {
@@ -344,12 +389,4 @@ void rtclient_ticket_history_free(ticket_history *history)
 		free(history->field);
 	free(history);
 	history = NULL;
-}
-
-void rtclient_ticket_history_list_free(history_list *list)
-{
-	for (size_t i = 0; i < list->length; i++)
-		rtclient_ticket_history_free(list->histories[i]);
-	free(list);
-	list = NULL;
 }

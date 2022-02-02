@@ -6,46 +6,38 @@
 #endif
 #endif
 #include <stdlib.h>
+#include <string.h>
 #include "request.h"
+#include "rtclient.h"
 #include "rtclient/ticket.h"
 #include "rtclient/search.h"
 
-typedef struct rtclient_ticket rtclient_ticket;
-typedef struct rtclient_search_ticket_list rtclient_search_ticket_list;
-
-static size_t ticket_handler(void *contents, size_t size, size_t nmemb
-		, void *writedata)
+static void handle_search(rtclient_response *response)
 {
-	size_t realsize = size * nmemb;
-	char response[realsize + 1];
-	memcpy(response, contents, realsize);
-	response[realsize] = '\0';
-	char lines[strlen(response) + 1];
-	strcpy(lines, response);
+	char data[response->numBytes];
+	strcpy(data, response->data);
+	char lines[response->numBytes];
+	strcpy(lines, response->data);
 
-	char *line = strtok(response, "\n");
+	char *line = strtok(data, "\n");
 	if (strstr(line, "200 Ok")) {
 		line = strtok(NULL, "\n");
 		size_t length = 0;
 		do {
 			length++;
 			if (!strcmp(line, "No matching results."))
-				return realsize;
+				return;
 		} while ((line = strtok(NULL, "\n")));
 
-		rtclient_search_ticket_list **listptr
-			= (rtclient_search_ticket_list **)writedata;
-		*listptr = malloc(sizeof(rtclient_search_ticket_list)
-				+ length * sizeof(rtclient_ticket));
-		rtclient_search_ticket_list *list = *listptr;
-		list->length = length;
+		struct rtclient_ticket **list
+			= malloc(sizeof(struct rtclient_ticket) * (length + 1));
 
 		char *linesaveptr = NULL;
 		line = strtok_r(lines, "\n", &linesaveptr);
 		line = strtok_r(NULL, "\n", &linesaveptr);
 		for (size_t i = 0; i < length; i++) {
-			list->tickets[i] = malloc(sizeof(rtclient_ticket));
-			rtclient_ticket *ticket = list->tickets[i]; 
+			list[i] = malloc(sizeof(struct rtclient_ticket));
+			struct rtclient_ticket *ticket = list[i];
 
 			char *tokensaveptr = NULL;
 			char *token = strtok_r(line, ":", &tokensaveptr);
@@ -57,6 +49,8 @@ static size_t ticket_handler(void *contents, size_t size, size_t nmemb
 
 			line = strtok_r(NULL, "\n", &linesaveptr);
 		}
+		list[length] = NULL;
+		((void (*)(struct rtclient_ticket **))response->userData)(list);
 	} else {
 #ifdef DEBUG
 #ifdef __ANDROID__
@@ -67,24 +61,12 @@ static size_t ticket_handler(void *contents, size_t size, size_t nmemb
 #endif
 #endif
 	}
-
-	return realsize;
+	rtclient_free_response(response);
 }
 
-void rtclient_search_ticket(rtclient_search_ticket_list **listptr
-		, const char *query)
+void rtclient_search_ticket(const char *query,
+		void (*callback)(struct rtclient_ticket **))
 {
-	request(ticket_handler, (void *)listptr, NULL, "%s%s"
-			, "REST/1.0/search/ticket?query=", query);
-}
-
-void rtclient_search_ticket_free(rtclient_search_ticket_list *list)
-{
-	for (size_t i = 0; i < list->length; i++) {
-		rtclient_ticket *ticket = list->tickets[i];
-		free(ticket->subject);
-		free(ticket);
-	}
-	free(list);
-	list = NULL;
+	request(handle_search, (void (*)(void *))callback, NULL,
+			"%s%s", "REST/1.0/search/ticket?query=", query);
 }
