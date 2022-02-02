@@ -5,30 +5,30 @@
 
 typedef struct rtclient_user rtclient_user;
 
-void rtclient_user_new(const char *name
-		, const char *password
-		, const char *email_address
-		, const char *real_name
-		, const char *nick_name
-		, const char *organization
-		, const char *address1
-		, const char *address2
-		, const char *city
-		, const char *state
-		, const char *zip
-		, const char *country
-		, const char *home_phone
-		, const char *work_phone
-		, const char *mobile_phone
-		, const char *pager_phone
-		, const char *contact_info
-		, const char *comments
-		, const char *signature
-		, const char *gecos
-		, enum rtclient_user_lang lang
-		, enum rtclient_user_timezone timezone
-		, bool disabled
-		, bool privileged)
+void rtclient_user_new(const char *name,
+		const char *password,
+		const char *email_address,
+		const char *real_name,
+		const char *nick_name,
+		const char *organization,
+		const char *address1,
+		const char *address2,
+		const char *city,
+		const char *state,
+		const char *zip,
+		const char *country,
+		const char *home_phone,
+		const char *work_phone,
+		const char *mobile_phone,
+		const char *pager_phone,
+		const char *contact_info,
+		const char *comments,
+		const char *signature,
+		const char *gecos,
+		enum rtclient_user_lang lang,
+		enum rtclient_user_timezone timezone,
+		bool disabled,
+		bool privileged)
 {
 	post("REST/1.0/user/new", (const char *[]){
 			name, "Name"
