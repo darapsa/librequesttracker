@@ -1,3 +1,6 @@
+#if defined __ANDROID__ && defined DEBUG
+#include <android/log.h>
+#endif
 #include <stdlib.h>
 #include "post.h"
 #include "rtclient/ticket.h"
@@ -93,13 +96,13 @@ static size_t history_handler(void *contents, size_t size, size_t nmemb
 		}
 	} else {
 #ifdef DEBUG
-#ifdef ANDROID
-		__android_log_print(ANDROID_LOG_INFO, "librtclient"
-				, "%s response status:\n%s", __func__, line);
+#ifdef __ANDROID__
+		__android_log_print(ANDROID_LOG_INFO, "librtclient",
+				"%s response status:\n%s", __func__, line);
 #else
 		printf("%s response status:\n%s\n", __func__, line);
-#endif // ANDROID
-#endif // DEBUG
+#endif
+#endif
 	}
 
 	return realsize;
@@ -295,13 +298,13 @@ static size_t history_l_handler(void *contents, size_t size, size_t nmemb
 		}
 	} else {
 #ifdef DEBUG
-#ifdef ANDROID
-		__android_log_print(ANDROID_LOG_INFO, "librtclient"
-				, "%s response status:\n%s", __func__, line);
+#ifdef __ANDROID__
+		__android_log_print(ANDROID_LOG_INFO, "librtclient",
+				"%s response status:\n%s", __func__, line);
 #else
 		printf("%s response status:\n%s\n", __func__, line);
-#endif // ANDROID
-#endif // DEBUG
+#endif
+#endif
 	}
 
 	return realsize;
