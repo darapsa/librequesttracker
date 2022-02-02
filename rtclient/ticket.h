@@ -9,24 +9,24 @@ struct rtclient_ticket {
 };
 
 enum rtclient_ticket_history_type {
-	RTCLIENT_TICKET_HISTORY_TYPE_NONE = 0
-	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_LINK
-	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBER
-	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBERSHIP
-	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_REMINDER
-	, RTCLIENT_TICKET_HISTORY_TYPE_ADD_WATCHER
-	, RTCLIENT_TICKET_HISTORY_TYPE_COMMENT
-	, RTCLIENT_TICKET_HISTORY_TYPE_COMMENT_EMAIL_RECORD
-	, RTCLIENT_TICKET_HISTORY_TYPE_CORRESPOND
-	, RTCLIENT_TICKET_HISTORY_TYPE_CREATE
-	, RTCLIENT_TICKET_HISTORY_TYPE_DEL_WATCHER
-	, RTCLIENT_TICKET_HISTORY_TYPE_DISABLED
-	, RTCLIENT_TICKET_HISTORY_TYPE_EMAIL_RECORD
-	, RTCLIENT_TICKET_HISTORY_TYPE_RESOLVE_REMINDER
-	, RTCLIENT_TICKET_HISTORY_TYPE_SET
-	, RTCLIENT_TICKET_HISTORY_TYPE_SET_WATCHER
-	, RTCLIENT_TICKET_HISTORY_TYPE_STATUS
-	, RTCLIENT_TICKET_HISTORY_TYPE_SYSTEM_ERROR
+	RTCLIENT_TICKET_HISTORY_TYPE_NONE = 0,
+	RTCLIENT_TICKET_HISTORY_TYPE_ADD_LINK,
+	RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBER,
+	RTCLIENT_TICKET_HISTORY_TYPE_ADD_MEMBERSHIP,
+	RTCLIENT_TICKET_HISTORY_TYPE_ADD_REMINDER,
+	RTCLIENT_TICKET_HISTORY_TYPE_ADD_WATCHER,
+	RTCLIENT_TICKET_HISTORY_TYPE_COMMENT,
+	RTCLIENT_TICKET_HISTORY_TYPE_COMMENT_EMAIL_RECORD,
+	RTCLIENT_TICKET_HISTORY_TYPE_CORRESPOND,
+	RTCLIENT_TICKET_HISTORY_TYPE_CREATE,
+	RTCLIENT_TICKET_HISTORY_TYPE_DEL_WATCHER,
+	RTCLIENT_TICKET_HISTORY_TYPE_DISABLED,
+	RTCLIENT_TICKET_HISTORY_TYPE_EMAIL_RECORD,
+	RTCLIENT_TICKET_HISTORY_TYPE_RESOLVE_REMINDER,
+	RTCLIENT_TICKET_HISTORY_TYPE_SET,
+	RTCLIENT_TICKET_HISTORY_TYPE_SET_WATCHER,
+	RTCLIENT_TICKET_HISTORY_TYPE_STATUS,
+	RTCLIENT_TICKET_HISTORY_TYPE_SYSTEM_ERROR
 };
 
 struct rtclient_ticket_history_attachment {
@@ -65,20 +65,20 @@ struct rtclient_ticket_history_list {
 extern "C" {
 #endif
 
-	void rtclient_ticket_new(const char *queue
-			, const char *requestor
-			, const char *subject
-			, const char *cc
-			, const char *admin_cc
-			, const char *owner
-			, const char *status
-			, const char *priority
-			, const char *initial_priority
-			, const char *final_priority
-			, const char *time_estimated
-			, const char *starts
-			, const char *due
-			, const char *text);
+void rtclient_ticket_new(const char *queue,
+		const char *requestor,
+		const char *subject,
+		const char *cc,
+		const char *admin_cc,
+		const char *owner,
+		const char *status,
+		const char *priority,
+		const char *initial_priority,
+		const char *final_priority,
+		const char *time_estimated,
+		const char *starts,
+		const char *due,
+		const char *text);
 	void rtclient_ticket_history(struct rtclient_ticket_history_list **listptr
 			, unsigned int id, bool long_format);
 	void rtclient_ticket_history_free
@@ -90,4 +90,4 @@ extern "C" {
 }
 #endif
 
-#endif // RTCLIENT_TICKET_H
+#endif
