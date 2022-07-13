@@ -4,11 +4,12 @@ AC_PROG_CC
 AM_PROG_AR
 LT_INIT
 AC_CANONICAL_HOST
-case $host_os in
-	*emscripten* ) emscripten=true;;
-	*) emscripten=false;;
+case $host_cpu in
+	*wasm* ) wasm=true;;
+	*) wasm=false;;
 esac
-if test "x$emscripten" = "xfalse"; then
+AM_CONDITIONAL([WASM], [test x$wasm = xtrue])
+if test "x$wasm" = "xfalse"; then
 	PKG_CHECK_MODULES([CURL], [libcurl])
 fi
 AC_CHECK_HEADERS([stddef.h])
@@ -19,7 +20,6 @@ AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_TYPE_SIZE_T
 AC_TYPE_SSIZE_T
-AM_CONDITIONAL([EMSCRIPTEN], [test x$emscripten = xtrue])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT

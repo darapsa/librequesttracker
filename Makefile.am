@@ -7,7 +7,7 @@ librtclient_la_SOURCES = \
 			 search.c
 librtclient_la_CPPFLAGS = -I${prefix}/include
 librtclient_la_LDFLAGS = -L${prefix}/lib
-if EMSCRIPTEN
+if WASM
 librtclient_la_LDFLAGS += -static
 else
 librtclient_la_CPPFLAGS += $(CURL_CFLAGS)
